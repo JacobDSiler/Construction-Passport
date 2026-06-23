@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construction Passport — Interactive Prototype</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--color-background-primary:#fff;--color-background-secondary:#f8fafc;--color-background-tertiary:#f1f5f9;--color-text-primary:#0f172a;--color-text-secondary:#64748b;--color-text-tertiary:#94a3b8;--color-border-secondary:#e2e8f0;--color-border-tertiary:#f1f5f9;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{font-family:var(--font-sans);background:#f1f5f9;display:flex;flex-direction:column;align-items:center;padding:20px 0 40px;min-height:100vh}
+h1{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:4px}
+p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
+.role-bar{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;padding:0 8px}
+.rb{padding:6px 11px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid transparent;display:flex;align-items:center;gap:4px;transition:all .15s;font-family:var(--font-sans)}
+.rb.on.w{background:#1C3A5E;color:#fff;border-color:#1C3A5E}
+.rb.on.e{background:#166634;color:#fff;border-color:#166634}
+.rb.on.m{background:#0f2744;color:#fff;border-color:#0f2744}
+.rb.on.r{background:#5b21b6;color:#fff;border-color:#5b21b6}
+.rb.on.t{background:#0891b2;color:#fff;border-color:#0891b2}
+.rb.off{background:#fff;color:#94a3b8;border-color:#e2e8f0}
+.phone{width:100%;max-width:360px;height:624px;background:#f8fafc;border-radius:22px;border:.5px solid #e2e8f0;box-shadow:0 8px 32px rgba(0,0,0,.12);overflow:hidden;display:flex;flex-direction:column}
+.sbar{padding:5px 14px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.8);flex-shrink:0}
+.scr{display:none;flex-direction:column;height:100%;overflow:hidden}.scr.on{display:flex}
+.hdr{padding:10px 14px 12px;color:#fff;flex-shrink:0}
+.bk{font-size:12px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:3px;margin-bottom:7px;cursor:pointer}
+.ht{font-size:18px;font-weight:500}.hs{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.sc{overflow-y:auto;flex:1;background:#f1f5f9}
+.ftr{padding:10px 12px;background:#fff;border-top:.5px solid #f1f5f9;flex-shrink:0}
+.btn{width:100%;padding:12px;border-radius:12px;font-size:14px;font-weight:500;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:6px;font-family:var(--font-sans)}
+.btn:last-child{margin-bottom:0}
+.btn.gh{background:transparent;color:#94a3b8;border:.5px solid #e2e8f0;font-size:13px}
+.sec{background:#fff;margin:6px 9px;border-radius:12px;border:.5px solid #f1f5f9;overflow:hidden}
+.sh{padding:6px 12px;font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#94a3b8;border-bottom:.5px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.row{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:.5px solid #f1f5f9;cursor:pointer}
+.row:last-child{border-bottom:none}
+.rl{font-size:13px;font-weight:500;color:#0f172a}.rs{font-size:11px;color:#64748b;margin-top:1px}
+.p{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500}
+.pg{background:#f0fdf4;border:1px solid #bbf7d0;color:#166634}
+.pa{background:#fef3c7;border:1px solid #fde68a;color:#92400e}
+.pr{background:#fee2e2;border:1px solid #fecaca;color:#dc2626}
+.pb{background:#E6F1FB;border:1px solid #bfdbfe;color:#1C3A5E}
+.pt{background:#ecfeff;border:1px solid #a5f3fc;color:#0891b2}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;flex-shrink:0}
+.cr{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:.5px solid #f1f5f9}.cr:last-child{border-bottom:none}
+.cd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tog{width:36px;height:21px;border-radius:11px;position:relative;cursor:pointer;flex-shrink:0;background:#22c55e;transition:background .2s}
+.tok{position:absolute;top:2.5px;right:2.5px;width:16px;height:16px;border-radius:50%;background:#fff;transition:all .2s}
+.tog.off .tok{right:auto;left:2.5px}
+.cbar{height:5px;background:#f8fafc;border-radius:3px;overflow:hidden;margin-top:4px}
+.cfill{height:5px;border-radius:3px}
+.bnav{display:flex;background:#fff;border-top:.5px solid #e2e8f0;padding:7px 0 9px;flex-shrink:0}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:3px 0;position:relative}
+.ni i{font-size:19px;color:#94a3b8}.ni.on i{color:#0f172a}
+.nl{font-size:9px;color:#94a3b8;font-weight:500}.ni.on .nl{color:#0f172a}
+.nbadge{position:absolute;top:0;right:18%;width:14px;height:14px;border-radius:50%;background:#ef4444;color:#fff;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.finput{width:100%;border:none;outline:none;font-size:13px;background:transparent;font-family:var(--font-sans);padding:9px 12px;color:#0f172a}
+.fselect{width:100%;border:none;outline:none;font-size:13px;background:transparent;font-family:var(--font-sans);padding:9px 12px;color:#0f172a;-webkit-appearance:none;cursor:pointer}
+.haz-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:.5px solid #f1f5f9;font-size:12px}
+.enroll-bar{height:4px;background:#f1f5f9;border-radius:3px;overflow:hidden;margin-top:5px}
+.enroll-fill{height:4px;background:#0891b2;border-radius:3px}
+</style>
+</head>
+<body>
+<h1>Construction Passport</h1>
+<p class="sub">Interactive prototype · Visual concept only · Not functional software</p>
+
+<div class="role-bar">
+  <button class="rb on w" onclick="setRole('w')"><i class="ti ti-user"></i> Worker</button>
+  <button class="rb off" onclick="setRole('e')"><i class="ti ti-building"></i> Employer / Subby</button>
+  <button class="rb off" onclick="setRole('m')"><i class="ti ti-building-skyscraper"></i> Main Contractor</button>
+  <button class="rb off" onclick="setRole('r')"><i class="ti ti-search"></i> Recruiter</button>
+  <button class="rb off" onclick="setRole('t')"><i class="ti ti-school"></i> Training Provider</button>
+</div>
+
+<div class="phone">
+  <div class="sbar" id="sbar" style="background:#1C3A5E">
+    <span>9:41</span>
+    <span style="display:flex;gap:5px"><i class="ti ti-wifi" style="font-size:12px"></i><i class="ti ti-battery-2" style="font-size:12px"></i></span>
+  </div>
+
+  <!-- ══ WORKER ══ -->
+  <div class="scr on" id="w-home">
+    <div class="hdr" style="background:#1C3A5E">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Good morning</div><div class="ht">John Murphy</div></div>
+        <div class="av" style="width:38px;height:38px;font-size:13px;background:rgba(255,255,255,.15)">JM</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <div style="background:rgba(34,197,94,.2);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#86efac">4</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Valid certs</div></div>
+        <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fff">2</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Active sites</div></div>
+        <div style="background:rgba(245,158,11,.2);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fcd34d">1</div><div style="font-size:9px;color:rgba(255,255,255,.55)">RAMS to sign</div></div>
+      </div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Quick actions</div>
+        <div class="row" onclick="go('w-passport')"><i class="ti ti-qrcode" style="font-size:16px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">My Passport</div><div class="rs">Share QR · View certs</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="go('w-vehicle')"><i class="ti ti-car" style="font-size:16px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Daily vehicle check</div><div class="rs">Not yet done today</div></div><span class="p pa">Due</span></div>
+        <div class="row" onclick="go('w-hazard')"><i class="ti ti-alert-triangle" style="font-size:16px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Report a hazard (HOC)</div><div class="rs">Low / Medium / High / Stop Work</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="go('w-rams')"><i class="ti ti-file-text" style="font-size:16px;color:#f59e0b"></i><div style="flex:1"><div class="rl">Sign RAMS</div><div class="rs">Containment install — action needed</div></div><span class="p pa">1</span></div>
+      </div>
+      <div class="sec">
+        <div class="sh">My certifications</div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Safe Pass</div><div class="rs">Expires Mar 2028</div></div><span class="p pg">Valid</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Manual Handling</div><div class="rs">Expires Nov 2027</div></div><span class="p pg">Valid</span></div>
+        <div class="cr"><div class="cd" style="background:#f59e0b"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Expires in 3 months</div></div><span class="p pa">Soon</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">First Aid QQI L5</div><div class="rs">Expires Jan 2027</div></div><span class="p pg">Valid</span></div>
+        <div class="row" onclick="go('w-courses')"><i class="ti ti-school" style="font-size:15px;color:#0891b2"></i><div style="flex:1"><div class="rl" style="color:#0891b2">Find renewal courses</div><div class="rs">MEWP expiring — 6 courses near you</div></div><span class="p pt">6 nearby</span></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="bnav">
+      <div class="ni on"><i class="ti ti-home"></i><span class="nl">Home</span></div>
+      <div class="ni" onclick="go('w-passport')"><i class="ti ti-qrcode"></i><span class="nl">Passport</span></div>
+      <div class="ni" onclick="go('w-courses')"><i class="ti ti-school"></i><span class="nl">Courses</span></div>
+      <div class="ni"><i class="ti ti-bell"></i><span class="nl">Alerts</span></div>
+    </div>
+  </div>
+
+  <div class="scr" id="w-passport">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-home')"><i class="ti ti-arrow-left"></i> Home</div>
+      <div class="ht">My Passport</div><div class="hs">CP-100245 · Share with employers</div>
+    </div>
+    <div class="sc">
+      <div style="background:#1C3A5E;padding:16px;display:flex;flex-direction:column;align-items:center">
+        <div style="background:#fff;border-radius:12px;padding:14px;display:inline-block">
+          <svg viewBox="0 0 80 80" width="110" height="110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="80" height="80" fill="white"/>
+            <rect x="5" y="5" width="25" height="25" fill="none" stroke="#1C3A5E" stroke-width="3"/>
+            <rect x="9" y="9" width="17" height="17" fill="#1C3A5E"/>
+            <rect x="50" y="5" width="25" height="25" fill="none" stroke="#1C3A5E" stroke-width="3"/>
+            <rect x="54" y="9" width="17" height="17" fill="#1C3A5E"/>
+            <rect x="5" y="50" width="25" height="25" fill="none" stroke="#1C3A5E" stroke-width="3"/>
+            <rect x="9" y="54" width="17" height="17" fill="#1C3A5E"/>
+            <rect x="35" y="5" width="4" height="4" fill="#1C3A5E"/><rect x="41" y="5" width="4" height="4" fill="#1C3A5E"/>
+            <rect x="35" y="11" width="4" height="8" fill="#1C3A5E"/><rect x="43" y="11" width="3" height="3" fill="#1C3A5E"/>
+            <rect x="35" y="35" width="10" height="4" fill="#1C3A5E"/><rect x="50" y="35" width="4" height="4" fill="#1C3A5E"/>
+            <rect x="57" y="35" width="4" height="4" fill="#1C3A5E"/><rect x="63" y="35" width="4" height="4" fill="#1C3A5E"/>
+            <rect x="35" y="42" width="4" height="4" fill="#1C3A5E"/><rect x="42" y="42" width="4" height="4" fill="#1C3A5E"/>
+            <rect x="50" y="42" width="4" height="10" fill="#1C3A5E"/><rect x="57" y="42" width="10" height="4" fill="#1C3A5E"/>
+            <rect x="35" y="50" width="8" height="4" fill="#1C3A5E"/><rect x="57" y="50" width="4" height="4" fill="#1C3A5E"/>
+            <rect x="35" y="57" width="4" height="4" fill="#1C3A5E"/><rect x="63" y="50" width="4" height="10" fill="#1C3A5E"/>
+          </svg>
+          <div style="text-align:center;font-size:11px;font-weight:600;color:#1C3A5E;margin-top:4px">John Murphy</div>
+          <div style="text-align:center;font-size:9px;color:#64748b">CP-100245</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:8px"><div style="width:7px;height:7px;border-radius:50%;background:#22c55e"></div><span style="font-size:11px;color:rgba(255,255,255,.8);font-weight:500">4 certs verified</span></div>
+      </div>
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Verified certifications</div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Safe Pass</div><div class="rs">Mar 2028</div></div><span class="p pg">Valid</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Manual Handling</div><div class="rs">Nov 2027</div></div><span class="p pg">Valid</span></div>
+        <div class="cr"><div class="cd" style="background:#f59e0b"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Expires Sep 2026</div></div><span class="p pa">Expiring</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">First Aid QQI L5</div><div class="rs">Jan 2027</div></div><span class="p pg">Valid</span></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-home')"><i class="ti ti-share"></i> Share passport</button></div>
+  </div>
+
+  <div class="scr" id="w-vehicle">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-home')"><i class="ti ti-arrow-left"></i> Home</div>
+      <div class="ht">Vehicle Check</div><div class="hs">Ford Transit · 23 June 2026</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Daily inspection</div>
+        <div id="vchecks">
+          <div class="row" onclick="vtick(this)"><i class="ti ti-circle" style="font-size:15px;color:#cbd5e1"></i><div class="rl">Tyres &amp; pressure</div></div>
+          <div class="row" onclick="vtick(this)"><i class="ti ti-circle" style="font-size:15px;color:#cbd5e1"></i><div class="rl">Lights &amp; indicators</div></div>
+          <div class="row" onclick="vtick(this)"><i class="ti ti-circle" style="font-size:15px;color:#cbd5e1"></i><div class="rl">Mirrors &amp; windscreen</div></div>
+          <div class="row" onclick="vtick(this)"><i class="ti ti-circle" style="font-size:15px;color:#cbd5e1"></i><div class="rl">Oil &amp; fluids</div></div>
+          <div class="row" onclick="vtick(this)"><i class="ti ti-circle" style="font-size:15px;color:#cbd5e1"></i><div class="rl">Brakes</div></div>
+        </div>
+      </div>
+      <div style="margin:0 9px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:9px 12px;font-size:11px;color:#166634">Tap each item to mark checked. All 5 must pass to submit.</div>
+    </div>
+    <div class="ftr"><button class="btn" id="vbtn" style="background:#cbd5e1;color:#fff;pointer-events:none" onclick="go('w-home')"><i class="ti ti-circle-check"></i> Submit inspection</button></div>
+  </div>
+
+  <div class="scr" id="w-hazard">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-home')"><i class="ti ti-arrow-left"></i> Home</div>
+      <div class="ht">Report Hazard</div><div class="hs">Hazard Observation Card (HOC)</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Severity level</div>
+        <div class="row" onclick="psev(this)"><i class="ti ti-circle-check" style="font-size:16px;color:#22c55e"></i><div style="flex:1"><div class="rl">Low — observation only</div><div class="rs">Noted, no immediate action</div></div></div>
+        <div class="row" onclick="psev(this)"><i class="ti ti-alert-circle" style="font-size:16px;color:#f59e0b"></i><div style="flex:1"><div class="rl">Medium — action needed</div><div class="rs">Manager alerted within 2 hours</div></div></div>
+        <div class="row" onclick="psev(this)"><i class="ti ti-flame" style="font-size:16px;color:#ef4444"></i><div style="flex:1"><div class="rl">High — immediate risk</div><div class="rs">Manager notified instantly</div></div></div>
+        <div class="row" onclick="psev(this)"><i class="ti ti-hand-stop" style="font-size:16px;color:#dc2626"></i><div style="flex:1"><div class="rl">Stop Work</div><div class="rs">All work halted, manager review</div></div></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Description</div>
+        <div style="padding:10px 12px"><textarea style="width:100%;border:none;outline:none;font-size:12px;background:transparent;resize:none;font-family:inherit" rows="3" placeholder="Describe what you observed…"></textarea></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#dc2626;color:#fff" onclick="go('w-home')"><i class="ti ti-send"></i> Submit hazard report</button></div>
+  </div>
+
+  <div class="scr" id="w-rams">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-home')"><i class="ti ti-arrow-left"></i> Home</div>
+      <div class="ht">Sign RAMS</div><div class="hs">Containment &amp; Cable Tray · Intel D6</div>
+    </div>
+    <div class="sc">
+      <div style="background:#1C3A5E;padding:10px 14px"><span class="p pg" style="font-size:9px"><i class="ti ti-circle-check" style="font-size:8px"></i> Approved by Jones Engineering</span></div>
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">I confirm I have read and understood:</div>
+        <div id="ramschks">
+          <div class="row" onclick="rchk(this)"><div class="rck" style="width:19px;height:19px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div><div class="rl">The scope of work and method</div></div>
+          <div class="row" onclick="rchk(this)"><div class="rck" style="width:19px;height:19px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div><div class="rl">All hazards and control measures</div></div>
+          <div class="row" onclick="rchk(this)"><div class="rck" style="width:19px;height:19px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div><div class="rl">PPE required for this task</div></div>
+          <div class="row" onclick="rchk(this)"><div class="rck" style="width:19px;height:19px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div><div class="rl">My right to stop work if unsafe</div></div>
+          <div class="row" onclick="rchk(this)" style="border:none"><div class="rck" style="width:19px;height:19px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"></div><div class="rl">Emergency procedures on site</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <button class="btn" id="rsbtn" style="background:#cbd5e1;color:#fff;pointer-events:none" onclick="go('w-home')"><i class="ti ti-writing"></i> Confirm &amp; sign</button>
+      <div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:4px">Tick all boxes to sign</div>
+    </div>
+  </div>
+
+  <div class="scr" id="w-courses">
+    <div class="hdr" style="background:#0891b2">
+      <div class="bk" onclick="go('w-home')"><i class="ti ti-arrow-left"></i> Home</div>
+      <div class="ht">Find a Course</div><div class="hs">MEWP renewal expiring · Dublin area</div>
+    </div>
+    <div class="sc">
+      <div style="background:#0891b2;padding:0 14px 14px">
+        <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:7px"><i class="ti ti-search" style="font-size:13px;color:rgba(255,255,255,.5)"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">MEWP / IPAF · Dublin…</span></div>
+      </div>
+      <div style="height:6px"></div>
+      <div style="padding:0 9px 5px;font-size:10px;color:#94a3b8">6 upcoming MEWP courses near you</div>
+      <div class="sec">
+        <div class="row" onclick="go('w-book')">
+          <div style="width:38px;height:38px;border-radius:10px;background:#0891b2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:16px"></i></div>
+          <div style="flex:1"><div class="rl">MEWP / IPAF Category 3b</div><div class="rs">Safe Pass Ireland · Swords</div><div class="rs">Tue 1 Jul · 8am–5pm · €185</div></div>
+          <div style="text-align:right"><div style="font-size:10px;color:#0891b2;font-weight:500">4 left</div></div>
+        </div>
+        <div class="row" onclick="go('w-book')">
+          <div style="width:38px;height:38px;border-radius:10px;background:#0891b2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:16px"></i></div>
+          <div style="flex:1"><div class="rl">MEWP / IPAF Category 3b</div><div class="rs">Dublin Training Centre · Tallaght</div><div class="rs">Wed 9 Jul · 8am–5pm · €195</div></div>
+          <div style="text-align:right"><div style="font-size:10px;color:#22c55e;font-weight:500">12 left</div></div>
+        </div>
+        <div class="row">
+          <div style="width:38px;height:38px;border-radius:10px;background:#64748b;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:16px"></i></div>
+          <div style="flex:1"><div class="rl">MEWP / IPAF Category 3b</div><div class="rs">Leinster Safety Training · Naas</div><div class="rs">Mon 14 Jul · 8am–5pm · €175</div></div>
+          <div style="text-align:right"><div style="font-size:10px;color:#94a3b8;font-weight:500">Full</div></div>
+        </div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+  </div>
+
+  <div class="scr" id="w-book">
+    <div class="hdr" style="background:#0891b2">
+      <div class="bk" onclick="go('w-courses')"><i class="ti ti-arrow-left"></i> Courses</div>
+      <div class="ht">MEWP / IPAF 3b</div><div class="hs">Safe Pass Ireland · Swords</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Course details</div>
+        <div style="padding:11px 12px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;gap:8px;font-size:12px"><i class="ti ti-calendar" style="color:#0891b2;width:14px"></i><span>Tuesday 1 July 2026 · 8:00am – 5:00pm</span></div>
+          <div style="display:flex;gap:8px;font-size:12px"><i class="ti ti-map-pin" style="color:#0891b2;width:14px"></i><span>Safe Pass Ireland, Unit 4 Airside, Swords</span></div>
+          <div style="display:flex;gap:8px;font-size:12px"><i class="ti ti-users" style="color:#0891b2;width:14px"></i><span>4 places remaining of 12</span></div>
+          <div style="display:flex;gap:8px;font-size:12px"><i class="ti ti-coin" style="color:#0891b2;width:14px"></i><span>€185 · Card or invoice</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">Your details (pre-filled from passport)</div>
+        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12px;font-weight:500">John Murphy</div>
+          <div style="font-size:11px;color:#64748b">CP-100245 · john.murphy@gmail.com</div>
+          <div style="font-size:11px;color:#0891b2;display:flex;align-items:center;gap:3px"><i class="ti ti-circle-check" style="font-size:11px"></i> MEWP pre-req (Safe Pass) verified</div>
+        </div>
+      </div>
+      <div style="margin:0 9px;background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:9px 12px;font-size:11px;color:#0891b2">Your cert will be added to your passport automatically once issued.</div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#0891b2;color:#fff" onclick="go('w-booked')"><i class="ti ti-circle-check"></i> Confirm booking — €185</button>
+      <button class="btn gh" onclick="go('w-courses')">Back to courses</button>
+    </div>
+  </div>
+
+  <div class="scr" id="w-booked">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0891b2;padding:28px;text-align:center;gap:12px">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="ti ti-circle-check" style="font-size:30px;color:#fff"></i></div>
+      <div style="font-size:20px;font-weight:500;color:#fff">Booking confirmed!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">MEWP / IPAF 3b<br>Tuesday 1 July · Swords<br>Safe Pass Ireland</div>
+      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,.85);line-height:1.6">Your cert will be added to your passport automatically after you complete the course.</div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-home')"><i class="ti ti-home"></i> Back to home</button></div>
+  </div>
+
+  <!-- ══ EMPLOYER ══ -->
+  <div class="scr" id="e-dash">
+    <div class="hdr" style="background:#166634">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Sub-contractor</div><div class="ht">Murphy Electrical</div></div>
+        <div class="av" style="width:36px;height:36px;font-size:13px;background:rgba(255,255,255,.15)">ME</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <div style="background:rgba(34,197,94,.25);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#86efac">6</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Compliant</div></div>
+        <div style="background:rgba(239,68,68,.25);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fca5a5">2</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Issues</div></div>
+        <div style="background:rgba(255,255,255,.08);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fff">8</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Total crew</div></div>
+      </div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Urgent — action needed</div>
+        <div class="row" onclick="go('e-worker')"><div class="av" style="width:30px;height:30px;font-size:10px;background:#ef4444">CM</div><div style="flex:1"><div class="rl">Conor McCarthy</div><div class="rs" style="color:#dc2626">Safe Pass expired 3 days ago</div></div><span class="p pr">Blocked</span></div>
+        <div class="row"><div class="av" style="width:30px;height:30px;font-size:10px;background:#f59e0b">TK</div><div style="flex:1"><div class="rl">Tom Kelly</div><div class="rs" style="color:#92400e">Forklift expires in 14 days</div></div><span class="p pa">Expiring</span></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Quick actions</div>
+        <div class="row" onclick="go('e-rams')"><i class="ti ti-file-text" style="font-size:15px;color:#166634"></i><div class="rl">RAMS</div><span class="p pa">1 pending</span></div>
+        <div class="row" onclick="go('e-site')"><i class="ti ti-map-pin" style="font-size:15px;color:#166634"></i><div class="rl">Sites</div><span class="p pg">Intel D6</span></div>
+        <div class="row"><i class="ti ti-hard-hat" style="font-size:15px;color:#166634"></i><div class="rl">PPE Register</div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="ni on"><i class="ti ti-layout-dashboard" style="color:#166634"></i><span class="nl" style="color:#166634">Dashboard</span></div>
+      <div class="ni" onclick="go('e-site')"><i class="ti ti-map-pin"></i><span class="nl">Sites</span></div>
+      <div class="ni" onclick="go('e-rams')"><i class="ti ti-file-text"></i><span class="nl">RAMS</span></div>
+      <div class="ni" style="position:relative"><i class="ti ti-bell"></i><div class="nbadge">4</div><span class="nl">Alerts</span></div>
+    </div>
+  </div>
+
+  <div class="scr" id="e-worker">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div style="display:flex;gap:9px;align-items:center"><div class="av" style="width:40px;height:40px;font-size:13px;background:#ef4444">CM</div><div><div class="ht">Conor McCarthy</div><div class="hs">Electrician · Safe Pass expired</div></div></div>
+    </div>
+    <div class="sc">
+      <div style="background:#fee2e2;border-left:3px solid #dc2626;margin:9px;border-radius:0 10px 10px 0;padding:9px 12px;font-size:11px;color:#dc2626">Safe Pass expired 20 June — not permitted on site.</div>
+      <div class="sec">
+        <div class="sh">Certifications</div>
+        <div class="cr"><div class="cd" style="background:#ef4444"></div><div style="flex:1"><div class="rl" style="font-size:12px">Safe Pass</div><div class="rs">Expired 20 June 2026</div></div><span class="p pr">Expired</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Manual Handling</div><div class="rs">Nov 2027</div></div><span class="p pg">Valid</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Mar 2028</div></div><span class="p pg">Valid</span></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Renewal courses near Conor</div>
+        <div class="row" style="cursor:default"><i class="ti ti-school" style="font-size:15px;color:#0891b2"></i><div style="flex:1"><div class="rl">Safe Pass — Swords</div><div class="rs">Thu 26 Jun · Safe Pass Ireland</div></div><span class="p pt">3 left</span></div>
+        <div class="row" style="cursor:default"><i class="ti ti-school" style="font-size:15px;color:#0891b2"></i><div style="flex:1"><div class="rl">Safe Pass — Tallaght</div><div class="rs">Fri 27 Jun · Dublin Training</div></div><span class="p pt">8 left</span></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('e-dash')"><i class="ti ti-send"></i> Send renewal reminder to Conor</button></div>
+  </div>
+
+  <div class="scr" id="e-site">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">Intel Campus D6</div><div class="hs">Active · 6 workers cleared</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Site compliance</div>
+        <div style="padding:11px 12px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Crew compliance</span><span style="font-weight:500;color:#92400e">75%</span></div>
+          <div class="cbar"><div class="cfill" style="width:75%;background:#f59e0b"></div></div>
+          <div style="margin-top:6px;font-size:10px;color:#64748b">2 of 8 workers have compliance issues</div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">Stop Work Authority</div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Require manager review</div><div class="rs">Before work stops</div></div><div class="tog" onclick="this.classList.toggle('off')"><div class="tok"></div></div></div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Escalation timeout</div><div class="rs">Auto-stop if no manager response</div></div><span style="font-size:12px;font-weight:500;color:#1C3A5E">15 min</span></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#166634;color:#fff" onclick="go('e-dash')"><i class="ti ti-chart-bar"></i> Export compliance report</button></div>
+  </div>
+
+  <div class="scr" id="e-rams">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">RAMS</div><div class="hs">Risk Assessment &amp; Method Statements</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Awaiting main contractor approval</div>
+        <div class="row"><i class="ti ti-file-text" style="font-size:16px;color:#92400e"></i><div style="flex:1"><div class="rl">Electrical Install — 2nd Floor</div><div class="rs">Submitted to Jones Engineering · 21 Jun</div></div><span class="p pa">Pending</span></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Active</div>
+        <div class="row"><i class="ti ti-file-check" style="font-size:16px;color:#166634"></i><div style="flex:1"><div class="rl">Containment &amp; Cable Tray</div><div class="rs">Approved · 3 / 4 workers signed</div></div><span class="p pg">Active</span></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#166634;color:#fff" onclick="go('e-rams-create')"><i class="ti ti-plus"></i> Create new RAMS</button></div>
+  </div>
+
+  <div class="scr" id="e-rams-create">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-rams')"><i class="ti ti-arrow-left"></i> RAMS</div>
+      <div class="ht">New RAMS</div><div class="hs">Murphy Electrical · Intel D6</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Task details</div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Task name e.g. 'Electrical Install — 3rd Floor'" type="text"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><select class="fselect"><option>Intel Campus D6</option><option>Citywest Data Centre</option></select></div>
+        <div style="display:flex"><input class="finput" style="flex:1;border-right:.5px solid #f1f5f9" placeholder="Start date"><input class="finput" style="flex:1" placeholder="End date"></div>
+      </div>
+      <div class="sec">
+        <div class="sh"><span>Hazards</span><span style="font-size:9px;color:#166634;text-transform:none;letter-spacing:0;cursor:pointer;font-weight:500" onclick="addHaz()">+ Add</span></div>
+        <div id="haz-list">
+          <div class="haz-row"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0"></div><div style="flex:1">Live electrical work</div><select style="border:none;background:transparent;font-size:11px;color:#64748b;font-family:inherit"><option>High</option><option>Medium</option><option>Low</option></select></div>
+          <div class="haz-row"><div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div><div style="flex:1">Working at height (MEWP)</div><select style="border:none;background:transparent;font-size:11px;color:#64748b;font-family:inherit"><option>Medium</option><option>High</option><option>Low</option></select></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">PPE required</div>
+        <div style="padding:9px 12px;display:flex;flex-wrap:wrap;gap:5px">
+          <span class="p pb" style="cursor:pointer" onclick="togPPE(this)">Hard hat</span>
+          <span class="p pb" style="cursor:pointer" onclick="togPPE(this)">Hi-vis</span>
+          <span class="p pb" style="cursor:pointer" onclick="togPPE(this)">Steel toe boots</span>
+          <span class="p" style="background:#f8fafc;border:1px solid #e2e8f0;color:#94a3b8;cursor:pointer" onclick="togPPE(this)">Gloves</span>
+          <span class="p" style="background:#f8fafc;border:1px solid #e2e8f0;color:#94a3b8;cursor:pointer" onclick="togPPE(this)">Harness</span>
+        </div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#166634;color:#fff" onclick="go('e-rams')"><i class="ti ti-send"></i> Submit to Jones Engineering</button>
+      <button class="btn gh" onclick="go('e-rams')">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ══ MAIN CONTRACTOR ══ -->
+  <div class="scr" id="m-dash">
+    <div class="hdr" style="background:#0f2744">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-size:10px;color:rgba(255,255,255,.4)">Main contractor</div><div class="ht">Jones Engineering</div></div>
+        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.1)">JE</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px">
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:7px;text-align:center"><div style="font-size:15px;font-weight:500;color:#fff">4</div><div style="font-size:8px;color:rgba(255,255,255,.4)">Subbies</div></div>
+        <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:7px;text-align:center"><div style="font-size:15px;font-weight:500;color:#fff">31</div><div style="font-size:8px;color:rgba(255,255,255,.4)">Workers</div></div>
+        <div style="background:rgba(239,68,68,.2);border-radius:8px;padding:7px;text-align:center"><div style="font-size:15px;font-weight:500;color:#fca5a5">6</div><div style="font-size:8px;color:rgba(255,255,255,.4)">Issues</div></div>
+        <div style="background:rgba(245,158,11,.2);border-radius:8px;padding:7px;text-align:center"><div style="font-size:15px;font-weight:500;color:#fcd34d">2</div><div style="font-size:8px;color:rgba(255,255,255,.4)">RAMS</div></div>
+      </div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Sub-contractors · Intel Campus D6</div>
+        <div class="row" onclick="go('m-subbie')"><div class="av" style="width:30px;height:30px;font-size:10px;background:#1C3A5E">ME</div><div style="flex:1"><div class="rl">Murphy Electrical</div><div class="cbar" style="width:90px"><div class="cfill" style="width:75%;background:#f59e0b"></div></div></div><span class="p pa">75%</span></div>
+        <div class="row"><div class="av" style="width:30px;height:30px;font-size:10px;background:#166634">OG</div><div style="flex:1"><div class="rl">O'Brien Groundworks</div><div class="cbar" style="width:90px"><div class="cfill" style="width:100%;background:#22c55e"></div></div></div><span class="p pg">100%</span></div>
+        <div class="row" onclick="go('m-subbie')"><div class="av" style="width:30px;height:30px;font-size:10px;background:#92400e">RM</div><div style="flex:1"><div class="rl">Ryan Mechanical</div><div class="cbar" style="width:90px"><div class="cfill" style="width:43%;background:#ef4444"></div></div></div><span class="p pr">43%</span></div>
+        <div class="row"><div class="av" style="width:30px;height:30px;font-size:10px;background:#4c1d95">KS</div><div style="flex:1"><div class="rl">Kavanagh Steel</div><div class="cbar" style="width:90px"><div class="cfill" style="width:100%;background:#22c55e"></div></div></div><span class="p pg">100%</span></div>
+      </div>
+      <div class="sec">
+        <div class="sh">RAMS awaiting approval</div>
+        <div class="row" onclick="go('m-rams')"><i class="ti ti-file-text" style="font-size:15px;color:#92400e"></i><div style="flex:1"><div class="rl">Electrical Install — 2nd Floor</div><div class="rs">Murphy Electrical · 21 Jun</div></div><span class="p pa">Review</span></div>
+        <div class="row"><i class="ti ti-file-text" style="font-size:15px;color:#92400e"></i><div style="flex:1"><div class="rl">HVAC Ductwork — Plant Room</div><div class="rs">Ryan Mechanical · 20 Jun</div></div><span class="p pa">Review</span></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="bnav">
+      <div class="ni on"><i class="ti ti-layout-dashboard" style="color:#0f2744"></i><span class="nl" style="color:#0f2744">Overview</span></div>
+      <div class="ni"><i class="ti ti-building-skyscraper"></i><span class="nl">Sites</span></div>
+      <div class="ni" style="position:relative"><i class="ti ti-file-text"></i><div class="nbadge">2</div><span class="nl">RAMS</span></div>
+      <div class="ni" style="position:relative"><i class="ti ti-bell"></i><div class="nbadge">6</div><span class="nl">Alerts</span></div>
+    </div>
+  </div>
+
+  <div class="scr" id="m-subbie">
+    <div class="hdr" style="background:#0f2744">
+      <div class="bk" onclick="go('m-dash')"><i class="ti ti-arrow-left"></i> Overview</div>
+      <div style="display:flex;gap:9px;align-items:center"><div class="av" style="width:36px;height:36px;font-size:12px;background:#1C3A5E">ME</div><div><div class="ht">Murphy Electrical</div><div class="hs">8 workers · 2 issues</div></div></div>
+    </div>
+    <div class="sc">
+      <div style="background:#fef3c7;border-left:3px solid #f59e0b;margin:9px;border-radius:0 10px 10px 0;padding:9px 12px;font-size:11px;color:#92400e">2 workers have compliance issues and should not be on site.</div>
+      <div class="sec">
+        <div class="sh">Workers</div>
+        <div class="row"><div class="av" style="width:28px;height:28px;font-size:9px;background:#22c55e">JM</div><div style="flex:1"><div class="rl">John Murphy</div></div><span class="p pg">Compliant</span></div>
+        <div class="row"><div class="av" style="width:28px;height:28px;font-size:9px;background:#22c55e">SR</div><div style="flex:1"><div class="rl">Sarah Reilly</div></div><span class="p pg">Compliant</span></div>
+        <div class="row"><div class="av" style="width:28px;height:28px;font-size:9px;background:#ef4444">CM</div><div style="flex:1"><div class="rl">Conor McCarthy</div><div class="rs" style="color:#dc2626">Safe Pass expired</div></div><span class="p pr">Blocked</span></div>
+        <div class="row"><div class="av" style="width:28px;height:28px;font-size:9px;background:#f59e0b">TK</div><div style="flex:1"><div class="rl">Tom Kelly</div><div class="rs" style="color:#92400e">Forklift expiring 14d</div></div><span class="p pa">Expiring</span></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#dc2626;color:#fff" onclick="go('m-dash')"><i class="ti ti-ban"></i> Flag issues to Murphy Electrical</button></div>
+  </div>
+
+  <div class="scr" id="m-rams">
+    <div class="hdr" style="background:#0f2744">
+      <div class="bk" onclick="go('m-dash')"><i class="ti ti-arrow-left"></i> RAMS queue</div>
+      <div class="ht">Review RAMS</div><div class="hs">Murphy Electrical · Awaiting approval</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Task details</div>
+        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;gap:7px;font-size:11px"><span style="color:#94a3b8;width:60px;flex-shrink:0">Task</span><span style="font-weight:500">Electrical Installation — 2nd Floor</span></div>
+          <div style="display:flex;gap:7px;font-size:11px"><span style="color:#94a3b8;width:60px;flex-shrink:0">From</span><span>Murphy Electrical · 21 Jun 2026</span></div>
+          <div style="display:flex;gap:7px;font-size:11px"><span style="color:#94a3b8;width:60px;flex-shrink:0">Period</span><span>25 Jun – 4 Jul 2026</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">Key hazards</div>
+        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;gap:6px;font-size:11px"><div style="width:7px;height:7px;border-radius:50%;background:#ef4444;margin-top:3px;flex-shrink:0"></div><span><b>Live electrical work</b> — High. PTW, isolation tested, insulated PPE.</span></div>
+          <div style="display:flex;gap:6px;font-size:11px"><div style="width:7px;height:7px;border-radius:50%;background:#f59e0b;margin-top:3px;flex-shrink:0"></div><span><b>MEWP</b> — Medium. IPAF required, ground spotter.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#166634;color:#fff;margin-bottom:6px" onclick="go('m-dash')"><i class="ti ti-circle-check"></i> Approve RAMS</button>
+      <button class="btn" style="background:#dc2626;color:#fff" onclick="go('m-dash')"><i class="ti ti-message"></i> Request changes</button>
+    </div>
+  </div>
+
+  <!-- ══ RECRUITER ══ -->
+  <div class="scr" id="r-search">
+    <div class="hdr" style="background:#5b21b6">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div class="ht">Find workers</div><div class="hs">Verified compliance · Irish construction</div></div>
+        <div style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative" onclick="go('r-shortlist')"><i class="ti ti-bookmark" style="font-size:15px;color:#fff"></i><div class="nbadge" style="right:-3px;top:-3px">3</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:7px"><i class="ti ti-search" style="font-size:13px;color:rgba(255,255,255,.45)"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">Electrician · Safe Pass ✓ · Dublin…</span></div>
+    </div>
+    <div style="background:#fff;border-bottom:.5px solid #f1f5f9;padding:6px 9px;display:flex;gap:5px;overflow-x:auto;flex-shrink:0">
+      <span style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:500;background:#5b21b6;color:#fff;white-space:nowrap;flex-shrink:0">Safe Pass ✓</span>
+      <span style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:500;border:1px solid #e2e8f0;white-space:nowrap;flex-shrink:0">Available now</span>
+      <span style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:500;border:1px solid #e2e8f0;white-space:nowrap;flex-shrink:0">MEWP/IPAF</span>
+    </div>
+    <div class="sc">
+      <div style="padding:6px 9px 3px;font-size:10px;color:#94a3b8">47 verified electricians · sorted by compliance match</div>
+      <div style="background:#fff;margin:0 9px 6px;border-radius:12px;border:.5px solid #f1f5f9;overflow:hidden;cursor:pointer" onclick="go('r-candidate')">
+        <div style="padding:11px 12px;display:flex;gap:9px">
+          <div class="av" style="width:38px;height:38px;font-size:13px;background:#1C3A5E">JM</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:500">John Murphy</div><div style="font-size:10px;color:#64748b;margin-bottom:4px">Electrician · 12yr · Dublin 15</div><div style="display:flex;gap:3px;flex-wrap:wrap"><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:500">Safe Pass ✓</span><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:500">MEWP ✓</span><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:500">First Aid ✓</span></div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:600;color:#166634">100%</div><div style="font-size:8px;color:#94a3b8">match</div></div>
+        </div>
+        <div style="background:#f8fafc;padding:6px 12px;display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div><span style="font-size:10px;color:#166634;font-weight:500">Available now · All certs verified</span></div>
+      </div>
+      <div style="background:#fff;margin:0 9px 6px;border-radius:12px;border:.5px solid #f1f5f9;overflow:hidden">
+        <div style="padding:11px 12px;display:flex;gap:9px">
+          <div class="av" style="width:38px;height:38px;font-size:13px;background:#166634">SR</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:500">Sarah Reilly</div><div style="font-size:10px;color:#64748b;margin-bottom:4px">Electrician · 8yr · Dublin 12</div><div style="display:flex;gap:3px"><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:500">Safe Pass ✓</span><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:500">MEWP ✓</span></div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:600;color:#166634">92%</div><div style="font-size:8px;color:#94a3b8">match</div></div>
+        </div>
+        <div style="background:#f8fafc;padding:6px 12px"><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#22c55e"></div><span style="font-size:10px;color:#166634;font-weight:500">Available now</span></div></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="bnav">
+      <div class="ni on"><i class="ti ti-search" style="color:#5b21b6"></i><span class="nl" style="color:#5b21b6">Search</span></div>
+      <div class="ni" onclick="go('r-shortlist')"><i class="ti ti-bookmark"></i><span class="nl">Shortlist</span></div>
+      <div class="ni"><i class="ti ti-send"></i><span class="nl">Outreach</span></div>
+      <div class="ni"><i class="ti ti-user"></i><span class="nl">Profile</span></div>
+    </div>
+  </div>
+
+  <div class="scr" id="r-candidate">
+    <div style="background:#5b21b6;padding:18px 14px 16px;text-align:center;flex-shrink:0">
+      <div class="bk" style="justify-content:flex-start;margin-bottom:10px" onclick="go('r-search')"><i class="ti ti-arrow-left"></i> Results</div>
+      <div class="av" style="width:56px;height:56px;font-size:18px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);margin:0 auto 8px">JM</div>
+      <div style="font-size:17px;font-weight:500;color:#fff">John Murphy</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">Electrician · 12 years · Dublin 15</div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:8px">
+        <span class="p" style="background:rgba(34,197,94,.2);color:#86efac;border:none"><i class="ti ti-circle-check" style="font-size:8px"></i> Available</span>
+        <span class="p" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);border:none">CP-100245</span>
+      </div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh"><span>Verified certs</span><span style="font-size:9px;color:#22c55e;text-transform:none;letter-spacing:0;font-weight:500">4 / 4 valid</span></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Safe Pass</div><div class="rs">Mar 2028</div></div><i class="ti ti-rosette-discount-check" style="color:#22c55e;font-size:14px"></i></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">Manual Handling</div><div class="rs">Nov 2027</div></div><i class="ti ti-rosette-discount-check" style="color:#22c55e;font-size:14px"></i></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Sep 2029</div></div><i class="ti ti-rosette-discount-check" style="color:#22c55e;font-size:14px"></i></div>
+        <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">First Aid QQI L5</div><div class="rs">Jan 2027</div></div><i class="ti ti-rosette-discount-check" style="color:#22c55e;font-size:14px"></i></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#5b21b6;color:#fff" onclick="go('r-contact')"><i class="ti ti-send"></i> Contact John</button>
+      <button class="btn gh" onclick="go('r-shortlist')"><i class="ti ti-bookmark"></i> Save to shortlist</button>
+    </div>
+  </div>
+
+  <div class="scr" id="r-contact">
+    <div class="hdr" style="background:#5b21b6">
+      <div class="bk" onclick="go('r-candidate')"><i class="ti ti-arrow-left"></i> John Murphy</div>
+      <div class="ht">Contact John</div><div class="hs">He'll be notified with your details</div>
+    </div>
+    <div class="sc" style="padding:9px">
+      <div style="background:#fff;border-radius:11px;border:.5px solid #f1f5f9;padding:12px;margin-bottom:8px">
+        <div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Role</div>
+        <input style="width:100%;border:none;outline:none;font-size:13px;font-weight:500;background:transparent;font-family:inherit" value="Electrician — Intel D9 · 6-month contract">
+      </div>
+      <div style="background:#fff;border-radius:11px;border:.5px solid #f1f5f9;padding:12px">
+        <div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Message</div>
+        <textarea style="width:100%;border:none;outline:none;font-size:12px;background:transparent;resize:none;font-family:inherit;line-height:1.6" rows="4">Hi John — we're staffing D9 at Intel for Q3. Your profile is a perfect match. Open to a conversation?</textarea>
+      </div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#5b21b6;color:#fff" onclick="go('r-search')"><i class="ti ti-send"></i> Send message</button>
+      <button class="btn gh" onclick="go('r-candidate')">Cancel</button>
+    </div>
+  </div>
+
+  <div class="scr" id="r-shortlist">
+    <div class="hdr" style="background:#5b21b6">
+      <div class="bk" onclick="go('r-search')"><i class="ti ti-arrow-left"></i> Search</div>
+      <div class="ht">My shortlist</div><div class="hs">3 saved candidates</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Intel D9 — Electrician</div>
+        <div class="row" onclick="go('r-candidate')"><div class="av" style="width:30px;height:30px;font-size:10px;background:#1C3A5E">JM</div><div style="flex:1"><div class="rl">John Murphy</div><div class="rs" style="color:#166634">Replied — interested</div></div><span class="p pg">Replied</span></div>
+        <div class="row"><div class="av" style="width:30px;height:30px;font-size:10px;background:#166634">SR</div><div style="flex:1"><div class="rl">Sarah Reilly</div><div class="rs">No reply yet</div></div><span class="p pa">Pending</span></div>
+        <div class="row"><div class="av" style="width:30px;height:30px;font-size:10px;background:#4c1d95">PK</div><div style="flex:1"><div class="rl">Patrick Kavanagh</div><div class="rs">Saved, not yet contacted</div></div><span class="p pb">Saved</span></div>
+      </div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#5b21b6;color:#fff" onclick="go('r-search')"><i class="ti ti-search"></i> Back to search</button></div>
+  </div>
+
+  <!-- ══ TRAINING PROVIDER ══ -->
+  <div class="scr" id="t-dash">
+    <div class="hdr" style="background:#0891b2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Training provider</div><div class="ht">Safe Pass Ireland</div></div>
+        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.15)">SP</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fff">6</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Upcoming</div></div>
+        <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fff">94</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Enrolled</div></div>
+        <div style="background:rgba(34,197,94,.2);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#86efac">38</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Certs issued</div></div>
+      </div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Upcoming courses</div>
+        <div class="row" onclick="go('t-course')">
+          <div style="width:36px;height:36px;border-radius:9px;background:#0891b2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:15px"></i></div>
+          <div style="flex:1"><div class="rl">MEWP / IPAF 3b</div><div class="rs">Tue 1 Jul · Swords</div><div class="enroll-bar" style="width:100px"><div class="enroll-fill" style="width:67%"></div></div><div style="font-size:9px;color:#0891b2;margin-top:2px">8 / 12 enrolled</div></div>
+          <span class="p pt">4 left</span>
+        </div>
+        <div class="row" onclick="go('t-course')">
+          <div style="width:36px;height:36px;border-radius:9px;background:#0891b2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:15px"></i></div>
+          <div style="flex:1"><div class="rl">Safe Pass Renewal</div><div class="rs">Thu 26 Jun · Swords</div><div class="enroll-bar" style="width:100px"><div class="enroll-fill" style="width:83%"></div></div><div style="font-size:9px;color:#0891b2;margin-top:2px">10 / 12 enrolled</div></div>
+          <span class="p pt">2 left</span>
+        </div>
+        <div class="row">
+          <div style="width:36px;height:36px;border-radius:9px;background:#64748b;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate" style="color:#fff;font-size:15px"></i></div>
+          <div style="flex:1"><div class="rl">Manual Handling</div><div class="rs">Mon 7 Jul · Swords</div><div class="enroll-bar" style="width:100px"><div class="enroll-fill" style="width:100%;background:#22c55e"></div></div><div style="font-size:9px;color:#166634;margin-top:2px">12 / 12 enrolled</div></div>
+          <span class="p pr">Full</span>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">This month</div>
+        <div class="row" style="cursor:default"><i class="ti ti-certificate" style="font-size:15px;color:#0891b2"></i><div style="flex:1"><div class="rl">Certs issued via passport</div><div class="rs">Auto-added to worker profiles</div></div><span style="font-size:15px;font-weight:600;color:#0891b2">38</span></div>
+        <div class="row" style="cursor:default"><i class="ti ti-trending-up" style="font-size:15px;color:#22c55e"></i><div style="flex:1"><div class="rl">Bookings from app</div><div class="rs">vs last month</div></div><span style="font-size:13px;font-weight:600;color:#22c55e">+41%</span></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="bnav">
+      <div class="ni on"><i class="ti ti-layout-dashboard" style="color:#0891b2"></i><span class="nl" style="color:#0891b2">Dashboard</span></div>
+      <div class="ni" onclick="go('t-course')"><i class="ti ti-calendar"></i><span class="nl">Courses</span></div>
+      <div class="ni" onclick="go('t-create')"><i class="ti ti-plus"></i><span class="nl">New</span></div>
+      <div class="ni"><i class="ti ti-chart-bar"></i><span class="nl">Reports</span></div>
+    </div>
+  </div>
+
+  <div class="scr" id="t-course">
+    <div class="hdr" style="background:#0891b2">
+      <div class="bk" onclick="go('t-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">MEWP / IPAF 3b</div><div class="hs">Tue 1 July · Swords · 8 enrolled</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Enrolled workers</div>
+        <div class="cr"><div class="av" style="width:28px;height:28px;font-size:9px;background:#1C3A5E">JM</div><div style="flex:1"><div class="rl" style="font-size:12px">John Murphy</div><div class="rs">CP-100245 · Safe Pass verified ✓</div></div><span class="p pg">Ready</span></div>
+        <div class="cr"><div class="av" style="width:28px;height:28px;font-size:9px;background:#166634">SR</div><div style="flex:1"><div class="rl" style="font-size:12px">Sarah Reilly</div><div class="rs">CP-100312 · Safe Pass verified ✓</div></div><span class="p pg">Ready</span></div>
+        <div class="cr"><div class="av" style="width:28px;height:28px;font-size:9px;background:#92400e">PK</div><div style="flex:1"><div class="rl" style="font-size:12px">Patrick Kavanagh</div><div class="rs">CP-100488 · Safe Pass verified ✓</div></div><span class="p pg">Ready</span></div>
+        <div class="cr"><div class="av" style="width:28px;height:28px;font-size:9px;background:#ef4444">MM</div><div style="flex:1"><div class="rl" style="font-size:12px">Mark Molloy</div><div class="rs" style="color:#dc2626">Safe Pass not verified — check</div></div><span class="p pr">Check</span></div>
+        <div style="padding:8px 12px;font-size:11px;color:#94a3b8;text-align:center">+ 4 more enrolled</div>
+      </div>
+      <div style="margin:0 9px 6px;background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:9px 12px;font-size:11px;color:#0891b2">Certs are issued directly to workers' passports when you mark the course complete.</div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#0891b2;color:#fff" onclick="go('t-issue')"><i class="ti ti-award"></i> Mark complete &amp; issue certs</button>
+      <button class="btn gh" onclick="go('t-dash')">Back</button>
+    </div>
+  </div>
+
+  <div class="scr" id="t-issue">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0891b2;padding:28px;text-align:center;gap:12px">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="ti ti-award" style="font-size:30px;color:#fff"></i></div>
+      <div style="font-size:20px;font-weight:500;color:#fff">7 certs issued!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">MEWP / IPAF 3b<br>Tuesday 1 July 2026</div>
+      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,.85);line-height:1.6">Certs have been added directly to each worker's Construction Passport and will appear on site scans immediately.</div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('t-dash')"><i class="ti ti-layout-dashboard"></i> Back to dashboard</button></div>
+  </div>
+
+  <div class="scr" id="t-create">
+    <div class="hdr" style="background:#0891b2">
+      <div class="bk" onclick="go('t-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">New Course</div><div class="hs">Will be listed publicly on the app</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Course details</div>
+        <div style="border-bottom:.5px solid #f1f5f9"><select class="fselect"><option>Safe Pass Renewal</option><option>MEWP / IPAF 3b</option><option>Manual Handling</option><option>Working at Heights</option><option>First Aid QQI L5</option></select></div>
+        <div style="display:flex;border-bottom:.5px solid #f1f5f9"><input class="finput" style="flex:1;border-right:.5px solid #f1f5f9" placeholder="Date" type="text" onfocus="this.value='Thu 10 Jul 2026'"><input class="finput" style="flex:1" placeholder="Start time" type="text" onfocus="this.value='8:00am'"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Location / venue" type="text"></div>
+        <div style="display:flex"><input class="finput" style="flex:1;border-right:.5px solid #f1f5f9" placeholder="Max places" type="number" value="12"><input class="finput" style="flex:1" placeholder="Price (€)" type="number" value="185"></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Visibility</div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Listed publicly on app</div><div class="rs">Workers can find &amp; book directly</div></div><div class="tog" style="background:#0891b2" onclick="this.classList.toggle('off')"><div class="tok"></div></div></div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Accept SOLAS funding</div><div class="rs">Allow funded bookings where eligible</div></div><div class="tog" style="background:#0891b2" onclick="this.classList.toggle('off')"><div class="tok"></div></div></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#0891b2;color:#fff" onclick="go('t-dash')"><i class="ti ti-world"></i> Publish course</button>
+      <button class="btn gh" onclick="go('t-dash')">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ROLES={w:{start:'w-home',color:'#1C3A5E',cls:'w'},e:{start:'e-dash',color:'#166634',cls:'e'},m:{start:'m-dash',color:'#0f2744',cls:'m'},r:{start:'r-search',color:'#5b21b6',cls:'r'},t:{start:'t-dash',color:'#0891b2',cls:'t'}};
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function setRole(role){const r=ROLES[role];document.getElementById('sbar').style.background=r.color;document.querySelectorAll('.rb').forEach(b=>{b.classList.remove('on','off');b.classList.add(b.classList.contains(r.cls)?'on':'off')});go(r.start)}
+function vtick(row){const i=row.querySelector('i');const on=i.classList.contains('ti-circle-check');i.classList.toggle('ti-circle-check',!on);i.classList.toggle('ti-circle',on);i.style.color=on?'#cbd5e1':'#22c55e';const done=document.querySelectorAll('#vchecks .ti-circle-check').length;const b=document.getElementById('vbtn');b.style.background=done===5?'#1C3A5E':'#cbd5e1';b.style.pointerEvents=done===5?'all':'none'}
+function psev(row){document.querySelectorAll('#w-hazard .row').forEach(r=>r.style.background='');row.style.background='#f8fafc'}
+function rchk(row){const c=row.querySelector('.rck');const on=c.dataset.on==='1';c.dataset.on=on?'0':'1';c.style.background=on?'':'#22c55e';c.style.borderColor=on?'#cbd5e1':'#22c55e';c.innerHTML=on?'':'<i class="ti ti-check" style="font-size:10px;color:#fff"></i>';const all=[...document.querySelectorAll('#ramschks .rck')].every(x=>x.dataset.on==='1');const b=document.getElementById('rsbtn');b.style.background=all?'#166634':'#cbd5e1';b.style.pointerEvents=all?'all':'none'}
+function addHaz(){const l=document.getElementById('haz-list');const d=document.createElement('div');d.className='haz-row';d.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div><div style="flex:1"><input style="border:none;outline:none;font-size:12px;background:transparent;width:100%;font-family:inherit" placeholder="New hazard…"></div><select style="border:none;background:transparent;font-size:11px;color:#64748b;font-family:inherit"><option>Medium</option><option>High</option><option>Low</option></select>';l.appendChild(d);d.querySelector('input').focus()}
+function togPPE(el){const active=el.classList.contains('pb');if(active){el.classList.remove('pb');el.style.cssText='background:#f8fafc;border:1px solid #e2e8f0;color:#94a3b8;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}else{el.style.cssText='background:#E6F1FB;border:1px solid #bfdbfe;color:#1C3A5E;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}}
+</script>
+</body>
+</html>
