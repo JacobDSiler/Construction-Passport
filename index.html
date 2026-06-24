@@ -954,8 +954,8 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
   <div class="scr" id="ob-w1">
     <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
       <div class="bk" onclick="go('ob-role')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="step-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 1 of 4</div>
+      <div class="step-dots"><div class="doton"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 1 of 6</div>
       <div class="ht" style="margin-top:8px">Your profile</div>
     </div>
     <div class="sc">
@@ -972,14 +972,99 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
       </div>
       <div style="height:6px"></div>
     </div>
-    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w2')">Continue <i class="ti ti-arrow-right"></i></button></div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w-personal')">Continue <i class="ti ti-arrow-right"></i></button></div>
   </div>
+
+  <!-- Worker onboarding: step 2 — personal details -->
+  <div class="scr" id="ob-w-personal">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-w1')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="doton"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 2 of 6</div>
+      <div class="ht" style="margin-top:8px">Personal details</div>
+    </div>
+    <div class="sc">
+      <div style="background:#E6F1FB;border-left:3px solid #1C3A5E;margin:9px;border-radius:0 10px 10px 0;padding:9px 12px;font-size:11px;color:#1C3A5E">You enter this once. It pre-fills every site induction automatically.</div>
+      <div class="sec">
+        <div class="sh">Identity</div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Date of birth" value="12 / 04 / 1989" type="text"></div>
+        <div style="border-bottom:.5px solid #f1f5f9">
+          <div style="padding:9px 12px;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-size:13px;font-weight:500;color:#0f172a">EU / EEA / Swiss citizen</div><div style="font-size:11px;color:#64748b;margin-top:1px">Full right to work in Ireland</div></div>
+            <div class="tog" id="eu-tog" style="background:#1C3A5E" onclick="toggleEU(this)"><div class="tok"></div></div>
+          </div>
+        </div>
+        <div id="pps-row" style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="PPS number" value="1234567T"></div>
+        <div id="permit-row" style="display:none;border-bottom:.5px solid #f1f5f9">
+          <select class="fselect">
+            <option>General Employment Permit</option>
+            <option>Critical Skills Employment Permit</option>
+            <option>Stamp 4 (unrestricted)</option>
+            <option>Dependant / Partner Permit</option>
+          </select>
+        </div>
+        <div id="permit-num-row" style="display:none;border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Permit number" type="text"></div>
+        <div><input class="finput" placeholder="PPS number" id="pps-non-eu" style="display:none" type="text"></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Home address</div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Address line 1" value="14 Beechwood Avenue"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Town / City" value="Clontarf, Dublin 3"></div>
+        <div><input class="finput" placeholder="Eircode" value="D03 X4F2"></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w-emergency')">Continue <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <!-- Worker onboarding: step 3 — emergency contact & medical -->
+  <div class="scr" id="ob-w-emergency">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-w-personal')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="doton"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 3 of 6</div>
+      <div class="ht" style="margin-top:8px">Emergency &amp; medical</div>
+    </div>
+    <div class="sc">
+      <div class="sec">
+        <div class="sh">Emergency contact</div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Full name" value="Mary Murphy"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><select class="fselect"><option>Spouse / Partner</option><option>Parent</option><option>Sibling</option><option>Child</option><option>Other</option></select></div>
+        <div><input class="finput" placeholder="Mobile number" value="+353 87 987 6543" type="tel"></div>
+      </div>
+      <div class="sec">
+        <div class="sh">CWPS membership</div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Enrolled in CWPS pension scheme</div><div class="rs">Construction Workers Pension Scheme</div></div><div class="tog" style="background:#1C3A5E" onclick="this.classList.toggle('off')"><div class="tok"></div></div></div>
+        <div style="border-bottom:none"><input class="finput" placeholder="CWPS membership number (optional)" value="CWPS-00481923"></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Medical &amp; fitness declaration</div>
+        <div style="padding:10px 12px">
+          <div id="med-decl" onclick="toggleMedDecl(this)" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer">
+            <div id="med-box" style="width:20px;height:20px;border-radius:5px;border:1.5px solid #cbd5e1;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center"></div>
+            <div style="font-size:11px;color:#0f172a;line-height:1.6">I declare that I am fit to work on a construction site and am not aware of any medical condition that could affect my ability to work safely or put others at risk.</div>
+          </div>
+        </div>
+        <div style="padding:0 12px 10px"><input class="finput" style="background:#f8fafc;border-radius:8px;font-size:11px;color:#64748b" placeholder="Any relevant medical info for first aiders (optional)…"></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Photo ID</div>
+        <div class="row" style="cursor:default"><select class="fselect"><option>Irish Driving Licence</option><option>Passport</option><option>EU National ID Card</option><option>GNIB / IRP Card</option></select></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" id="med-btn" style="background:#cbd5e1;color:#fff;pointer-events:none" onclick="go('ob-w2')">Continue <i class="ti ti-arrow-right"></i></button>
+      <div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:3px">Tick the declaration to continue</div>
+    </div>
+  </div>
+
 
   <div class="scr" id="ob-w2">
     <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
-      <div class="bk" onclick="go('ob-w1')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="step-dots"><div class="dot"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 2 of 4</div>
+      <div class="bk" onclick="go('ob-w-emergency')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="doton"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 4 of 6</div>
       <div class="ht" style="margin-top:8px">Your trade</div>
     </div>
     <div class="sc">
@@ -1004,8 +1089,8 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
   <div class="scr" id="ob-w3">
     <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
       <div class="bk" onclick="go('ob-w2')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot on"></div><div class="dot"></div></div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 3 of 4</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="doton"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 5 of 6</div>
       <div class="ht" style="margin-top:8px">Your employer</div><div class="hs">Who do you work for?</div>
     </div>
     <div class="sc">
@@ -1028,8 +1113,8 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
   <div class="scr" id="ob-w4">
     <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
       <div class="bk" onclick="go('ob-w3')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
-      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot on"></div></div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 4 of 4</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="doton"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 6 of 6</div>
       <div class="ht" style="margin-top:8px">Add your first cert</div><div class="hs">You can always add more later</div>
     </div>
     <div class="sc">
@@ -1111,6 +1196,26 @@ function psev(row){document.querySelectorAll('#w-hazard .row').forEach(r=>r.styl
 function rchk(row){const c=row.querySelector('.rck');const on=c.dataset.on==='1';c.dataset.on=on?'0':'1';c.style.background=on?'':'#22c55e';c.style.borderColor=on?'#cbd5e1':'#22c55e';c.innerHTML=on?'':'<i class="ti ti-check" style="font-size:10px;color:#fff"></i>';const all=[...document.querySelectorAll('#ramschks .rck')].every(x=>x.dataset.on==='1');const b=document.getElementById('rsbtn');b.style.background=all?'#166634':'#cbd5e1';b.style.pointerEvents=all?'all':'none'}
 function addHaz(){const l=document.getElementById('haz-list');const d=document.createElement('div');d.className='haz-row';d.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div><div style="flex:1"><input style="border:none;outline:none;font-size:12px;background:transparent;width:100%;font-family:inherit" placeholder="New hazard…"></div><select style="border:none;background:transparent;font-size:11px;color:#64748b;font-family:inherit"><option>Medium</option><option>High</option><option>Low</option></select>';l.appendChild(d);d.querySelector('input').focus()}
 
+
+function toggleEU(tog){
+  tog.classList.toggle('off');
+  const isEU = !tog.classList.contains('off');
+  document.getElementById('permit-row').style.display = isEU ? 'none' : 'block';
+  document.getElementById('permit-num-row').style.display = isEU ? 'none' : 'block';
+  const ppsRow = document.getElementById('pps-row');
+  if(ppsRow) ppsRow.style.display = 'block';
+}
+function toggleMedDecl(el){
+  const box = document.getElementById('med-box');
+  const checked = box.dataset.on === '1';
+  box.dataset.on = checked ? '0' : '1';
+  box.style.background = checked ? '' : '#1C3A5E';
+  box.style.borderColor = checked ? '#cbd5e1' : '#1C3A5E';
+  box.innerHTML = checked ? '' : '<i class="ti ti-check" style="font-size:11px;color:#fff"></i>';
+  const btn = document.getElementById('med-btn');
+  btn.style.background = checked ? '#cbd5e1' : '#1C3A5E';
+  btn.style.pointerEvents = checked ? 'none' : 'all';
+}
 function startOCR(){
   const btn=document.getElementById('ocr-btn');
   btn.innerHTML='<i class="ti ti-loader" style="animation:spin 1s linear infinite;display:inline-block"></i> Scanning...';
