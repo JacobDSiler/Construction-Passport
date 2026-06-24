@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--color-background-primary:#fff;--color-background-secondary:#f8fafc;--color-background-tertiary:#f1f5f9;--color-text-primary:#0f172a;--color-text-secondary:#64748b;--color-text-tertiary:#94a3b8;--color-border-secondary:#e2e8f0;--color-border-tertiary:#f1f5f9;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-body{font-family:var(--font-sans);background:#f1f5f9;display:flex;flex-direction:column;align-items:center;padding:20px 0 40px;min-height:100vh}
+body{font-family:var(--font-sans);background:#f1f5f9;display:flex;flex-direction:column;align-items:center;padding:20px 0 40px;min-height:100vh;justify-content:center}
 h1{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:4px}
 p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
 .role-bar{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;padding:0 8px}
@@ -59,32 +59,35 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
 .haz-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:.5px solid #f1f5f9;font-size:12px}
 .enroll-bar{height:4px;background:#f1f5f9;border-radius:3px;overflow:hidden;margin-top:5px}
 .enroll-fill{height:4px;background:#0891b2;border-radius:3px}
+
+.rb.on.ob{background:#0f172a;color:#fff;border-color:#0f172a}
+@keyframes scan{0%{top:8%}100%{top:82%}}
+.scan-line{position:absolute;left:8%;right:8%;height:2px;background:rgba(28,58,94,.7);border-radius:1px;animation:scan 1.6s ease-in-out infinite alternate;box-shadow:0 0 8px rgba(28,58,94,.4)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:9px 12px}
+.trade-pill{padding:10px 8px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:12px;font-weight:500;color:#0f172a;text-align:center;cursor:pointer;background:#fff;font-family:inherit;transition:all .15s}
+.trade-pill.sel{border-color:#1C3A5E;background:#E6F1FB;color:#1C3A5E}
+.step-dots{display:flex;gap:5px;justify-content:center;margin:6px 0 2px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
+.dot.on{background:#fff;width:18px;border-radius:3px}
 </style>
 </head>
 <body>
 <h1>Construction Passport</h1>
-<p class="sub">Interactive prototype · Visual concept only · Not functional software</p>
-
-<div class="role-bar">
-  <button class="rb on w" onclick="setRole('w')"><i class="ti ti-user"></i> Worker</button>
-  <button class="rb off" onclick="setRole('e')"><i class="ti ti-building"></i> Employer / Subby</button>
-  <button class="rb off" onclick="setRole('m')"><i class="ti ti-building-skyscraper"></i> Main Contractor</button>
-  <button class="rb off" onclick="setRole('r')"><i class="ti ti-search"></i> Recruiter</button>
-  <button class="rb off" onclick="setRole('t')"><i class="ti ti-school"></i> Training Provider</button>
-</div>
+<p class="sub">Interactive prototype · Visual concept only · Not functional software · Tap avatar to switch role</p>
 
 <div class="phone">
-  <div class="sbar" id="sbar" style="background:#1C3A5E">
+  <div class="sbar" id="sbar" style="background:#0f2744">
     <span>9:41</span>
     <span style="display:flex;gap:5px"><i class="ti ti-wifi" style="font-size:12px"></i><i class="ti ti-battery-2" style="font-size:12px"></i></span>
   </div>
 
   <!-- ══ WORKER ══ -->
-  <div class="scr on" id="w-home">
+  <div class="scr" id="w-home">
     <div class="hdr" style="background:#1C3A5E">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Good morning</div><div class="ht">John Murphy</div></div>
-        <div class="av" style="width:38px;height:38px;font-size:13px;background:rgba(255,255,255,.15)">JM</div>
+        <div class="av" style="width:38px;height:38px;font-size:13px;background:rgba(255,255,255,.15);cursor:pointer" onclick="go('ob-role')" title="Switch role">JM</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
         <div style="background:rgba(34,197,94,.2);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#86efac">4</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Valid certs</div></div>
@@ -157,6 +160,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
         <div class="cr"><div class="cd" style="background:#f59e0b"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Expires Sep 2026</div></div><span class="p pa">Expiring</span></div>
         <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">First Aid QQI L5</div><div class="rs">Jan 2027</div></div><span class="p pg">Valid</span></div>
       </div>
+      <div class="row" onclick="go('w-cert-add')"><i class="ti ti-plus" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl" style="color:#1C3A5E">Add a certification</div><div class="rs">Scan cert to auto-fill details</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
       <div style="height:6px"></div>
     </div>
     <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-home')"><i class="ti ti-share"></i> Share passport</button></div>
@@ -311,7 +315,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
     <div class="hdr" style="background:#166634">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Sub-contractor</div><div class="ht">Murphy Electrical</div></div>
-        <div class="av" style="width:36px;height:36px;font-size:13px;background:rgba(255,255,255,.15)">ME</div>
+        <div class="av" style="width:36px;height:36px;font-size:13px;background:rgba(255,255,255,.15);cursor:pointer" onclick="go('ob-role')" title="Switch role">ME</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
         <div style="background:rgba(34,197,94,.25);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#86efac">6</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Compliant</div></div>
@@ -330,6 +334,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
         <div class="sh">Quick actions</div>
         <div class="row" onclick="go('e-rams')"><i class="ti ti-file-text" style="font-size:15px;color:#166634"></i><div class="rl">RAMS</div><span class="p pa">1 pending</span></div>
         <div class="row" onclick="go('e-site')"><i class="ti ti-map-pin" style="font-size:15px;color:#166634"></i><div class="rl">Sites</div><span class="p pg">Intel D6</span></div>
+        <div class="row" onclick="go('e-add-worker')"><i class="ti ti-user-plus" style="font-size:15px;color:#166634"></i><div class="rl">Add / invite worker</div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
         <div class="row"><i class="ti ti-hard-hat" style="font-size:15px;color:#166634"></i><div class="rl">PPE Register</div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
       </div>
     </div>
@@ -337,7 +342,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
       <div class="ni on"><i class="ti ti-layout-dashboard" style="color:#166634"></i><span class="nl" style="color:#166634">Dashboard</span></div>
       <div class="ni" onclick="go('e-site')"><i class="ti ti-map-pin"></i><span class="nl">Sites</span></div>
       <div class="ni" onclick="go('e-rams')"><i class="ti ti-file-text"></i><span class="nl">RAMS</span></div>
-      <div class="ni" style="position:relative"><i class="ti ti-bell"></i><div class="nbadge">4</div><span class="nl">Alerts</span></div>
+      <div class="ni" style="position:relative" onclick="go('e-notifs')"><i class="ti ti-bell"></i><div class="nbadge">4</div><span class="nl">Alerts</span></div>
     </div>
   </div>
 
@@ -449,7 +454,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
     <div class="hdr" style="background:#0f2744">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div><div style="font-size:10px;color:rgba(255,255,255,.4)">Main contractor</div><div class="ht">Jones Engineering</div></div>
-        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.1)">JE</div>
+        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.1);cursor:pointer" onclick="go('ob-role')" title="Switch role">JE</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px">
         <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:7px;text-align:center"><div style="font-size:15px;font-weight:500;color:#fff">4</div><div style="font-size:8px;color:rgba(255,255,255,.4)">Subbies</div></div>
@@ -642,7 +647,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
     <div class="hdr" style="background:#0891b2">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div><div style="font-size:10px;color:rgba(255,255,255,.45)">Training provider</div><div class="ht">Safe Pass Ireland</div></div>
-        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.15)">SP</div>
+        <div class="av" style="width:36px;height:36px;font-size:12px;background:rgba(255,255,255,.15);cursor:pointer" onclick="go('ob-role')" title="Switch role">SP</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
         <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px"><div style="font-size:17px;font-weight:500;color:#fff">6</div><div style="font-size:9px;color:rgba(255,255,255,.55)">Upcoming</div></div>
@@ -745,16 +750,377 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
     </div>
   </div>
 
-</div>
 
+  <!-- ══ WORKER: CERT UPLOAD ══ -->
+  <div class="scr" id="w-cert-add">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-passport')"><i class="ti ti-arrow-left"></i> Passport</div>
+      <div class="ht">Add a Cert</div><div class="hs">Scan or enter details manually</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Select cert type</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:9px 12px">
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #1C3A5E;background:#E6F1FB;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x1F4CB;</div><div style="font-size:11px;font-weight:600;color:#1C3A5E">Safe Pass</div></div>
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x1F4AA;</div><div style="font-size:11px;font-weight:500;color:#0f172a">Manual Handling</div></div>
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x1F3D7;</div><div style="font-size:11px;font-weight:500;color:#0f172a">MEWP / IPAF</div></div>
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x2764;&#xFE0F;</div><div style="font-size:11px;font-weight:500;color:#0f172a">First Aid QQI L5</div></div>
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x26A0;&#xFE0F;</div><div style="font-size:11px;font-weight:500;color:#0f172a">Working at Heights</div></div>
+          <div onclick="go('w-cert-scan')" style="padding:12px 10px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center"><div style="font-size:20px;margin-bottom:4px">&#x2795;</div><div style="font-size:11px;font-weight:500;color:#0f172a">Other</div></div>
+        </div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+  </div>
+
+  <div class="scr" id="w-cert-scan">
+    <div style="background:#0f172a;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px;position:relative">
+      <div style="font-size:13px;color:rgba(255,255,255,.5);text-align:center">Hold your Safe Pass card inside the frame</div>
+      <div style="width:240px;height:152px;position:relative">
+        <div style="position:absolute;inset:0;border:2px solid rgba(28,58,94,.6);border-radius:10px;background:rgba(28,58,94,.08)"></div>
+        <div style="position:absolute;top:0;left:0;width:18px;height:18px;border-top:3px solid #1C3A5E;border-left:3px solid #1C3A5E;border-radius:3px 0 0 0"></div>
+        <div style="position:absolute;top:0;right:0;width:18px;height:18px;border-top:3px solid #1C3A5E;border-right:3px solid #1C3A5E;border-radius:0 3px 0 0"></div>
+        <div style="position:absolute;bottom:0;left:0;width:18px;height:18px;border-bottom:3px solid #1C3A5E;border-left:3px solid #1C3A5E;border-radius:0 0 0 3px"></div>
+        <div style="position:absolute;bottom:0;right:0;width:18px;height:18px;border-bottom:3px solid #1C3A5E;border-right:3px solid #1C3A5E;border-radius:0 0 3px 0"></div>
+        <div class="scan-line" id="sline"></div>
+        <div style="position:absolute;inset:16px;display:flex;flex-direction:column;justify-content:center;gap:5px;opacity:.25">
+          <div style="height:8px;background:#1C3A5E;border-radius:3px;width:60%"></div>
+          <div style="height:6px;background:#1C3A5E;border-radius:3px;width:85%"></div>
+          <div style="height:6px;background:#1C3A5E;border-radius:3px;width:70%"></div>
+        </div>
+      </div>
+      <button id="ocr-btn" onclick="startOCR()" style="background:#1C3A5E;color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px"><i class="ti ti-scan"></i> Scan card</button>
+      <button onclick="go('w-cert-review')" style="background:transparent;color:rgba(255,255,255,.4);border:none;font-size:11px;cursor:pointer;font-family:inherit">Enter details manually</button>
+    </div>
+    <div style="background:#0f172a;padding:10px 14px;flex-shrink:0">
+      <button onclick="go('w-cert-add')" style="background:transparent;color:rgba(255,255,255,.4);border:none;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Change cert type</button>
+    </div>
+  </div>
+
+  <div class="scr" id="w-cert-review">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-cert-scan')"><i class="ti ti-arrow-left"></i> Scan</div>
+      <div class="ht">Review Details</div><div class="hs">Auto-filled from scan — edit if needed</div>
+    </div>
+    <div class="sc">
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;margin:9px;border-radius:10px;padding:9px 12px;font-size:11px;color:#166634;display:flex;gap:7px;align-items:center"><i class="ti ti-circle-check" style="font-size:14px"></i> Cert scanned successfully — check details below</div>
+      <div class="sec">
+        <div class="sh">Cert details</div>
+        <div style="border-bottom:.5px solid #f1f5f9;padding:0"><input class="finput" value="Safe Pass" style="font-weight:500"></div>
+        <div style="border-bottom:.5px solid #f1f5f9;padding:0"><input class="finput" value="John Murphy" placeholder="Name on cert"></div>
+        <div style="border-bottom:.5px solid #f1f5f9;padding:0"><input class="finput" value="SP-2024-00481923" placeholder="Cert / card number"></div>
+        <div style="border-bottom:.5px solid #f1f5f9;padding:0"><input class="finput" value="16 Mar 2028" placeholder="Expiry date"></div>
+        <div style="padding:0"><input class="finput" value="SOLAS / QQI" placeholder="Issuing body"></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-cert-done')"><i class="ti ti-circle-check"></i> Save to passport</button>
+      <button class="btn gh" onclick="go('w-cert-scan')">Re-scan</button>
+    </div>
+  </div>
+
+  <div class="scr" id="w-cert-done">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#166634;padding:28px;text-align:center;gap:12px">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="ti ti-certificate" style="font-size:30px;color:#fff"></i></div>
+      <div style="font-size:20px;font-weight:500;color:#fff">Safe Pass added!</div>
+      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;text-align:left;width:100%">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Cert type</span><b>Safe Pass</b></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Number</span><b>SP-2024-00481923</b></div>
+        <div style="display:flex;justify-content:space-between"><span>Expires</span><b>16 Mar 2028</b></div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55)">Visible to employers who scan your passport QR</div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-passport')"><i class="ti ti-qrcode"></i> Back to passport</button>
+      <button class="btn gh" onclick="go('w-cert-add')">Add another cert</button>
+    </div>
+  </div>
+
+  <!-- ══ EMPLOYER: ADD WORKER ══ -->
+  <div class="scr" id="e-add-worker">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">Add Worker</div><div class="hs">Search by name or CP number</div>
+    </div>
+    <div class="sc">
+      <div style="background:#166634;padding:0 14px 14px">
+        <div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:7px"><i class="ti ti-search" style="font-size:13px;color:rgba(255,255,255,.5)"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">Search name or CP number…</span></div>
+      </div>
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Search result</div>
+        <div class="row">
+          <div class="av" style="width:36px;height:36px;font-size:12px;background:#1C3A5E">JM</div>
+          <div style="flex:1"><div class="rl">John Murphy</div><div class="rs">Electrician · CP-100245</div><div style="display:flex;gap:4px;margin-top:3px"><span class="p pg" style="font-size:9px">Safe Pass ✓</span><span class="p pg" style="font-size:9px">MEWP ✓</span></div></div>
+          <button onclick="go('e-dash')" style="background:#166634;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:500;cursor:pointer;font-family:inherit">Add</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sh">Or invite someone new</div>
+        <div style="padding:10px 12px;display:flex;flex-direction:column;gap:7px">
+          <button style="background:#25D366;color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit"><i class="ti ti-brand-whatsapp"></i> Send WhatsApp invite</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+            <button style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#0f172a;font-family:inherit"><i class="ti ti-mail" style="color:#1C3A5E"></i> Email</button>
+            <button style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#0f172a;font-family:inherit"><i class="ti ti-message" style="color:#1C3A5E"></i> SMS</button>
+          </div>
+          <button style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:#0f172a;font-family:inherit"><i class="ti ti-link" style="color:#1C3A5E"></i> Copy invite link</button>
+        </div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+  </div>
+
+  <!-- ══ EMPLOYER: NOTIFICATIONS ══ -->
+  <div class="scr" id="e-notifs">
+    <div class="hdr" style="background:#166634">
+      <div class="bk" onclick="go('e-dash')"><i class="ti ti-arrow-left"></i> Dashboard</div>
+      <div class="ht">Notifications</div><div class="hs">4 unread</div>
+    </div>
+    <div class="sc">
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Recent</div>
+        <div class="row" onclick="go('e-worker')"><div style="width:36px;height:36px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-certificate-off" style="color:#dc2626;font-size:16px"></i></div><div style="flex:1"><div class="rl">Safe Pass expired</div><div class="rs">Conor McCarthy — not permitted on site</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">2h ago</div></div>
+        <div class="row"><div style="width:36px;height:36px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-alert-triangle" style="color:#f59e0b;font-size:16px"></i></div><div style="flex:1"><div class="rl">Cert expiring in 14 days</div><div class="rs">Tom Kelly — Forklift licence</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">1d ago</div></div>
+        <div class="row"><div style="width:36px;height:36px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-alert-triangle" style="color:#f59e0b;font-size:16px"></i></div><div style="flex:1"><div class="rl">RAMS changes requested</div><div class="rs">Electrical Install — Jones Engineering</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">1d ago</div></div>
+        <div class="row"><div style="width:36px;height:36px;border-radius:10px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-file-check" style="color:#166634;font-size:16px"></i></div><div style="flex:1"><div class="rl">RAMS approved</div><div class="rs">Containment &amp; Cable Tray</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">2d ago</div></div>
+        <div class="row"><div style="width:36px;height:36px;border-radius:10px;background:#E6F1FB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-user-check" style="color:#1C3A5E;font-size:16px"></i></div><div style="flex:1"><div class="rl">New worker joined</div><div class="rs">Sarah Reilly — all certs verified</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">3d ago</div></div>
+      </div>
+      <div class="sec">
+        <div class="sh">Alert settings</div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Cert expiry — 30 days out</div><div class="rs">Push notification to you</div></div><div class="tog" onclick="this.classList.toggle('off')" style="background:#166634"><div class="tok"></div></div></div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Cert expiry — 7 days out</div><div class="rs">Push + WhatsApp to worker</div></div><div class="tog" onclick="this.classList.toggle('off')" style="background:#166634"><div class="tok"></div></div></div>
+        <div class="row" style="cursor:default"><div style="flex:1"><div class="rl">Hazard reports</div><div class="rs">Instant push for Medium and above</div></div><div class="tog" onclick="this.classList.toggle('off')" style="background:#166634"><div class="tok"></div></div></div>
+        <div class="row" style="cursor:default;border:none"><div style="flex:1"><div class="rl">RAMS status changes</div><div class="rs">Approved, changes requested</div></div><div class="tog" onclick="this.classList.toggle('off')" style="background:#166634"><div class="tok"></div></div></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+  </div>
+
+  <!-- ══ ONBOARDING ══ -->
+  <div class="scr on" id="ob-welcome">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f2744;padding:28px;text-align:center;gap:14px">
+      <div style="width:72px;height:72px;border-radius:18px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin-bottom:4px"><i class="ti ti-id-badge" style="font-size:34px;color:#fff"></i></div>
+      <div style="font-size:24px;font-weight:600;color:#fff;line-height:1.2">Construction<br>Passport</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;max-width:260px">The smarter way to manage compliance on Irish construction sites.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:8px">
+        <button onclick="go('ob-role')" style="background:#1C3A5E;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit">Get started</button>
+        <button onclick="setRole('w')" style="background:transparent;color:rgba(255,255,255,.35);border:none;font-size:12px;cursor:pointer;font-family:inherit">Already have an account? Sign in</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr" id="ob-role">
+    <div style="background:#0f2744;padding:16px 14px 20px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-welcome')" style="color:rgba(255,255,255,.45);margin-bottom:10px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div style="font-size:20px;font-weight:500;color:#fff">What's your role?</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:3px">We'll set up the right view for you</div>
+    </div>
+    <div class="sc" style="background:#0f2744">
+      <div style="padding:6px 14px;display:flex;flex-direction:column;gap:8px">
+        <div onclick="go('ob-w1')" style="background:rgba(28,58,94,.6);border:1.5px solid rgba(28,58,94,.8);border-radius:14px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:12px;background:#1C3A5E;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-hard-hat" style="font-size:22px;color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:500;color:#fff">Worker</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Carry your digital passport &amp; certs</div></div>
+          <i class="ti ti-chevron-right" style="color:rgba(255,255,255,.25);margin-left:auto"></i>
+        </div>
+        <div onclick="go('ob-e1')" style="background:rgba(22,102,52,.4);border:1.5px solid rgba(22,102,52,.6);border-radius:14px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:12px;background:#166634;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-building" style="font-size:22px;color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:500;color:#fff">Employer / Sub-contractor</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Manage crew compliance &amp; RAMS</div></div>
+          <i class="ti ti-chevron-right" style="color:rgba(255,255,255,.25);margin-left:auto"></i>
+        </div>
+        <div onclick="setRole('m')" style="background:rgba(15,39,68,.6);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:12px;background:#0f2744;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-building-skyscraper" style="font-size:22px;color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:500;color:#fff">Main Contractor</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Oversee all sub-contractors on site</div></div>
+          <i class="ti ti-chevron-right" style="color:rgba(255,255,255,.25);margin-left:auto"></i>
+        </div>
+        <div onclick="setRole('r')" style="background:rgba(91,33,182,.2);border:1.5px solid rgba(91,33,182,.4);border-radius:14px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:12px;background:#5b21b6;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-search" style="font-size:22px;color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:500;color:#fff">Recruiter</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Search &amp; verify workers instantly</div></div>
+          <i class="ti ti-chevron-right" style="color:rgba(255,255,255,.25);margin-left:auto"></i>
+        </div>
+        <div onclick="setRole('t')" style="background:rgba(8,145,178,.2);border:1.5px solid rgba(8,145,178,.4);border-radius:14px;padding:16px;cursor:pointer;display:flex;gap:12px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:12px;background:#0891b2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-school" style="font-size:22px;color:#fff"></i></div>
+          <div><div style="font-size:15px;font-weight:500;color:#fff">Training Provider</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Post courses &amp; issue certs to passports</div></div>
+          <i class="ti ti-chevron-right" style="color:rgba(255,255,255,.25);margin-left:auto"></i>
+        </div>
+      </div>
+      <div style="height:10px"></div>
+    </div>
+  </div>
+
+  <!-- Worker onboarding steps -->
+  <div class="scr" id="ob-w1">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-role')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 1 of 4</div>
+      <div class="ht" style="margin-top:8px">Your profile</div>
+    </div>
+    <div class="sc">
+      <div style="height:8px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;padding:8px 0 14px">
+        <div style="width:64px;height:64px;border-radius:50%;background:#1C3A5E;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;color:#fff;cursor:pointer;position:relative">JM<div style="position:absolute;bottom:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid #f1f5f9;display:flex;align-items:center;justify-content:center"><i class="ti ti-camera" style="font-size:10px;color:#64748b"></i></div></div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:6px">Tap to add photo</div>
+      </div>
+      <div class="sec">
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="First name" value="John" style="font-weight:500"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Last name" value="Murphy" style="font-weight:500"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Mobile number" value="+353 87 123 4567" type="tel"></div>
+        <div><input class="finput" placeholder="Email address" value="john.murphy@gmail.com" type="email"></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w2')">Continue <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <div class="scr" id="ob-w2">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-w1')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 2 of 4</div>
+      <div class="ht" style="margin-top:8px">Your trade</div>
+    </div>
+    <div class="sc">
+      <div style="height:8px"></div>
+      <div class="trade-grid" style="padding:9px 12px;background:#fff;margin:0 9px;border-radius:12px;border:.5px solid #f1f5f9;gap:7px">
+        <button class="trade-pill sel" onclick="pickTrade(this)">Electrician</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Plumber</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Carpenter</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Groundworker</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Steel Fixer</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Plant Operator</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Scaffolder</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Painter</button>
+        <button class="trade-pill" onclick="pickTrade(this)">Bricklayer</button>
+        <button class="trade-pill" onclick="pickTrade(this)">General Operative</button>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w3')">Continue <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <div class="scr" id="ob-w3">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-w2')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot on"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 3 of 4</div>
+      <div class="ht" style="margin-top:8px">Your employer</div><div class="hs">Who do you work for?</div>
+    </div>
+    <div class="sc">
+      <div style="background:#1C3A5E;padding:0 14px 14px"><div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:7px"><i class="ti ti-search" style="font-size:13px;color:rgba(255,255,255,.5)"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">Search company name…</span></div></div>
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Search result</div>
+        <div class="row" onclick="go('ob-w4')">
+          <div class="av" style="width:36px;height:36px;font-size:12px;background:#166634">ME</div>
+          <div style="flex:1"><div class="rl">Murphy Electrical</div><div class="rs">Electrician crew · Dublin</div></div>
+          <i class="ti ti-circle-check" style="color:#22c55e;font-size:18px"></i>
+        </div>
+      </div>
+      <div style="margin:0 9px"><button onclick="go('ob-w4')" style="width:100%;padding:11px;border-radius:10px;background:transparent;border:1px solid #e2e8f0;font-size:12px;color:#64748b;cursor:pointer;font-family:inherit">I'm self-employed / skip for now</button></div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('ob-w4')">Continue <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <div class="scr" id="ob-w4">
+    <div style="background:#1C3A5E;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-w3')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot on"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 4 of 4</div>
+      <div class="ht" style="margin-top:8px">Add your first cert</div><div class="hs">You can always add more later</div>
+    </div>
+    <div class="sc">
+      <div style="height:8px"></div>
+      <div class="sec">
+        <div class="sh">Which cert do you have on you?</div>
+        <div class="row" onclick="go('w-cert-scan')"><i class="ti ti-certificate" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Scan a cert now</div><div class="rs">Takes 30 seconds — details auto-fill</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="setRole('w')"><i class="ti ti-clock-pause" style="font-size:15px;color:#94a3b8"></i><div style="flex:1"><div class="rl" style="color:#64748b">Skip for now</div><div class="rs">Add certs from your passport later</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-cert-scan')"><i class="ti ti-scan"></i> Scan my Safe Pass</button></div>
+  </div>
+
+  <!-- Employer onboarding steps -->
+  <div class="scr" id="ob-e1">
+    <div style="background:#166634;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-role')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 1 of 3</div>
+      <div class="ht" style="margin-top:8px">Your company</div>
+    </div>
+    <div class="sc">
+      <div style="height:8px"></div>
+      <div class="sec">
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Company name" value="Murphy Electrical Ltd" style="font-weight:500"></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><select class="fselect"><option>Electrical</option><option>Mechanical</option><option>Civil / Groundworks</option><option>Steel</option><option>Fit-out</option><option>General contractor</option></select></div>
+        <div style="border-bottom:.5px solid #f1f5f9"><input class="finput" placeholder="Your name" value="Paul Murphy"></div>
+        <div><input class="finput" placeholder="Work email" value="paul@murphyelectrical.ie" type="email"></div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#166634;color:#fff" onclick="go('ob-e2')">Continue <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <div class="scr" id="ob-e2">
+    <div style="background:#166634;padding:14px 14px 16px;flex-shrink:0">
+      <div class="bk" onclick="go('ob-e1')" style="color:rgba(255,255,255,.45);margin-bottom:8px"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="step-dots"><div class="dot"></div><div class="dot on"></div><div class="dot"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px">Step 2 of 3</div>
+      <div class="ht" style="margin-top:8px">Invite your first worker</div><div class="hs">Get your crew on board fast</div>
+    </div>
+    <div class="sc">
+      <div style="background:#166634;padding:0 14px 14px"><div style="background:rgba(255,255,255,.12);border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:7px"><i class="ti ti-search" style="font-size:13px;color:rgba(255,255,255,.5)"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">Search by name or CP number…</span></div></div>
+      <div style="height:6px"></div>
+      <div class="sec">
+        <div class="sh">Or invite via</div>
+        <div class="row" onclick="go('ob-e3')"><i class="ti ti-brand-whatsapp" style="font-size:16px;color:#25D366"></i><div style="flex:1"><div class="rl">WhatsApp</div><div class="rs">They tap the link and join instantly</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="go('ob-e3')"><i class="ti ti-mail" style="font-size:16px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Email invite</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="go('ob-e3')" style="border:none"><i class="ti ti-link" style="font-size:16px;color:#64748b"></i><div style="flex:1"><div class="rl">Copy invite link</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+      </div>
+      <div style="margin:0 9px"><button onclick="go('ob-e3')" style="width:100%;padding:11px;border-radius:10px;background:transparent;border:1px solid #e2e8f0;font-size:12px;color:#64748b;cursor:pointer;font-family:inherit">Skip — invite workers later</button></div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#166634;color:#fff" onclick="go('ob-e3')">Send invites <i class="ti ti-arrow-right"></i></button></div>
+  </div>
+
+  <div class="scr" id="ob-e3">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#166634;padding:28px;text-align:center;gap:12px">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="ti ti-building" style="font-size:30px;color:#fff"></i></div>
+      <div style="font-size:20px;font-weight:500;color:#fff">You're all set!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">Murphy Electrical is live on Construction Passport. Your crew will appear here once they accept their invites.</div>
+      <div style="background:rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,.85);line-height:1.6">Every time a worker shares their QR code with a new site, that contractor is prompted to join — your profile grows automatically.</div>
+    </div>
+    <div class="ftr"><button class="btn" style="background:#0f2744;color:#fff" onclick="setRole('e')"><i class="ti ti-layout-dashboard"></i> Go to my dashboard</button></div>
+  </div>
+
+
+
+
+</div>
 <script>
-const ROLES={w:{start:'w-home',color:'#1C3A5E',cls:'w'},e:{start:'e-dash',color:'#166634',cls:'e'},m:{start:'m-dash',color:'#0f2744',cls:'m'},r:{start:'r-search',color:'#5b21b6',cls:'r'},t:{start:'t-dash',color:'#0891b2',cls:'t'}};
+const ROLES={
+  ob:{start:'ob-welcome',color:'#0f172a',cls:'ob'},w:{start:'w-home',color:'#1C3A5E',cls:'w'},e:{start:'e-dash',color:'#166634',cls:'e'},m:{start:'m-dash',color:'#0f2744',cls:'m'},r:{start:'r-search',color:'#5b21b6',cls:'r'},t:{start:'t-dash',color:'#0891b2',cls:'t'}};
 function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
-function setRole(role){const r=ROLES[role];document.getElementById('sbar').style.background=r.color;document.querySelectorAll('.rb').forEach(b=>{b.classList.remove('on','off');b.classList.add(b.classList.contains(r.cls)?'on':'off')});go(r.start)}
+function setRole(role){const r=ROLES[role];document.getElementById('sbar').style.background=r.color;go(r.start)}
 function vtick(row){const i=row.querySelector('i');const on=i.classList.contains('ti-circle-check');i.classList.toggle('ti-circle-check',!on);i.classList.toggle('ti-circle',on);i.style.color=on?'#cbd5e1':'#22c55e';const done=document.querySelectorAll('#vchecks .ti-circle-check').length;const b=document.getElementById('vbtn');b.style.background=done===5?'#1C3A5E':'#cbd5e1';b.style.pointerEvents=done===5?'all':'none'}
 function psev(row){document.querySelectorAll('#w-hazard .row').forEach(r=>r.style.background='');row.style.background='#f8fafc'}
 function rchk(row){const c=row.querySelector('.rck');const on=c.dataset.on==='1';c.dataset.on=on?'0':'1';c.style.background=on?'':'#22c55e';c.style.borderColor=on?'#cbd5e1':'#22c55e';c.innerHTML=on?'':'<i class="ti ti-check" style="font-size:10px;color:#fff"></i>';const all=[...document.querySelectorAll('#ramschks .rck')].every(x=>x.dataset.on==='1');const b=document.getElementById('rsbtn');b.style.background=all?'#166634':'#cbd5e1';b.style.pointerEvents=all?'all':'none'}
 function addHaz(){const l=document.getElementById('haz-list');const d=document.createElement('div');d.className='haz-row';d.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div><div style="flex:1"><input style="border:none;outline:none;font-size:12px;background:transparent;width:100%;font-family:inherit" placeholder="New hazard…"></div><select style="border:none;background:transparent;font-size:11px;color:#64748b;font-family:inherit"><option>Medium</option><option>High</option><option>Low</option></select>';l.appendChild(d);d.querySelector('input').focus()}
+
+function startOCR(){
+  const btn=document.getElementById('ocr-btn');
+  btn.innerHTML='<i class="ti ti-loader" style="animation:spin 1s linear infinite;display:inline-block"></i> Scanning...';
+  btn.style.pointerEvents='none';
+  setTimeout(()=>go('w-cert-review'),2200);
+}
+function pickTrade(el){
+  document.querySelectorAll('.trade-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+}
 function togPPE(el){const active=el.classList.contains('pb');if(active){el.classList.remove('pb');el.style.cssText='background:#f8fafc;border:1px solid #e2e8f0;color:#94a3b8;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}else{el.style.cssText='background:#E6F1FB;border:1px solid #bfdbfe;color:#1C3A5E;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}}
 </script>
 </body>
