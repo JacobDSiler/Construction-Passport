@@ -70,6 +70,16 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
 .step-dots{display:flex;gap:5px;justify-content:center;margin:6px 0 2px}
 .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
 .dot.on{background:#fff;width:18px;border-radius:3px}
+
+.cert-card{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:11px;padding:10px 6px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .12s;position:relative}
+.cert-card.cert-sel{background:#E6F1FB;border-color:#1C3A5E}
+.cert-card.cert-sel .cc-tick{display:flex}
+.cc-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.cc-label{font-size:10px;font-weight:500;color:#0f172a;text-align:center;line-height:1.3}
+.cert-card.cert-sel .cc-label{color:#1C3A5E}
+.cc-tick{width:16px;height:16px;border-radius:50%;background:#1C3A5E;position:absolute;top:5px;right:5px;display:none;align-items:center;justify-content:center}
+.cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px 12px}
+.ucard{background:#fff;border-radius:12px;border:.5px solid #e2e8f0;padding:12px;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -160,10 +170,10 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
         <div class="cr"><div class="cd" style="background:#f59e0b"></div><div style="flex:1"><div class="rl" style="font-size:12px">MEWP / IPAF</div><div class="rs">Expires Sep 2026</div></div><span class="p pa">Expiring</span></div>
         <div class="cr"><div class="cd" style="background:#22c55e"></div><div style="flex:1"><div class="rl" style="font-size:12px">First Aid QQI L5</div><div class="rs">Jan 2027</div></div><span class="p pg">Valid</span></div>
       </div>
-      <div class="row" onclick="go('w-cert-add')"><i class="ti ti-plus" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl" style="color:#1C3A5E">Add a certification</div><div class="rs">Scan cert to auto-fill details</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+      <div class="row" onclick="go('w-cert-select')"><i class="ti ti-plus" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl" style="color:#1C3A5E">Add a certification</div><div class="rs">Scan cert to auto-fill details</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
       <div style="height:6px"></div>
     </div>
-    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-home')"><i class="ti ti-share"></i> Share passport</button></div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-scan-cta')"><i class="ti ti-share"></i> Share passport</button></div>
   </div>
 
   <div class="scr" id="w-vehicle">
@@ -794,7 +804,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
       <button onclick="go('w-cert-review')" style="background:transparent;color:rgba(255,255,255,.4);border:none;font-size:11px;cursor:pointer;font-family:inherit">Enter details manually</button>
     </div>
     <div style="background:#0f172a;padding:10px 14px;flex-shrink:0">
-      <button onclick="go('w-cert-add')" style="background:transparent;color:rgba(255,255,255,.4);border:none;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Change cert type</button>
+      <button onclick="go('w-cert-select')" style="background:transparent;color:rgba(255,255,255,.4);border:none;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Change cert type</button>
     </div>
   </div>
 
@@ -834,7 +844,7 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
     </div>
     <div class="ftr">
       <button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-passport')"><i class="ti ti-qrcode"></i> Back to passport</button>
-      <button class="btn gh" onclick="go('w-cert-add')">Add another cert</button>
+      <button class="btn gh" onclick="go('w-cert-select')">Add another cert</button>
     </div>
   </div>
 
@@ -1121,12 +1131,12 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
       <div style="height:8px"></div>
       <div class="sec">
         <div class="sh">Which cert do you have on you?</div>
-        <div class="row" onclick="go('w-cert-scan')"><i class="ti ti-certificate" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Scan a cert now</div><div class="rs">Takes 30 seconds — details auto-fill</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
+        <div class="row" onclick="go('w-cert-select')"><i class="ti ti-certificate" style="font-size:15px;color:#1C3A5E"></i><div style="flex:1"><div class="rl">Pick your certs</div><div class="rs">Select what you hold, upload each one</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
         <div class="row" onclick="setRole('w')"><i class="ti ti-clock-pause" style="font-size:15px;color:#94a3b8"></i><div style="flex:1"><div class="rl" style="color:#64748b">Skip for now</div><div class="rs">Add certs from your passport later</div></div><i class="ti ti-chevron-right" style="color:#cbd5e1;font-size:13px"></i></div>
       </div>
       <div style="height:6px"></div>
     </div>
-    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-cert-scan')"><i class="ti ti-scan"></i> Scan my Safe Pass</button></div>
+    <div class="ftr"><button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-cert-select')"><i class="ti ti-scan"></i> Scan my Safe Pass</button></div>
   </div>
 
   <!-- Employer onboarding steps -->
@@ -1185,6 +1195,191 @@ p.sub{font-size:11px;color:#94a3b8;margin-bottom:14px}
 
 
 
+
+  <!-- ══ PUBLIC SCAN PAGE ══ -->
+  <div class="scr" id="w-scan-cta">
+    <div style="background:#fff;padding:10px 14px;border-bottom:.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:22px;height:22px;border-radius:5px;background:#1C3A5E;display:flex;align-items:center;justify-content:center"><i class="ti ti-id-badge" style="font-size:12px;color:#fff"></i></div>
+        <span style="font-size:13px;font-weight:600;color:#1C3A5E">Construction Passport</span>
+      </div>
+      <span style="font-size:9px;color:#94a3b8;background:#f1f5f9;padding:2px 7px;border-radius:20px">Public verification page</span>
+    </div>
+    <div class="sc" style="background:#fff">
+      <div style="background:linear-gradient(135deg,#1C3A5E 0%,#0f2744 100%);padding:18px 16px 20px;text-align:center">
+        <div class="av" style="width:56px;height:56px;font-size:18px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);margin:0 auto 10px">JM</div>
+        <div style="font-size:18px;font-weight:500;color:#fff">John Murphy</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">CP-100245</div>
+        <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap">
+          <span style="background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.3);color:#86efac;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500">4 certs verified</span>
+          <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500">EU right to work</span>
+        </div>
+      </div>
+      <div style="padding:12px 14px 6px">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#94a3b8;margin-bottom:8px">Verified certifications</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Safe Pass</div><div style="font-size:10px;color:#64748b">Expires Mar 2028</div></div><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:500">Valid</span></div>
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">Manual Handling</div><div style="font-size:10px;color:#64748b">Expires Nov 2027</div></div><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:500">Valid</span></div>
+          <div style="background:#fef3c7;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">MEWP / IPAF</div><div style="font-size:10px;color:#92400e">Expires Sep 2026 — renewing soon</div></div><span style="background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:500">Expiring</span></div>
+          <div style="background:#f8fafc;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0"></div><div style="flex:1"><div style="font-size:12px;font-weight:500">First Aid QQI L5</div><div style="font-size:10px;color:#64748b">Expires Jan 2027</div></div><span style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166634;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:500">Valid</span></div>
+        </div>
+      </div>
+      <div style="margin:10px 14px;background:#E6F1FB;border-radius:12px;padding:14px">
+        <div style="font-size:13px;font-weight:600;color:#1C3A5E;margin-bottom:4px">Manage your whole crew like this</div>
+        <div style="font-size:11px;color:#1C3A5E;opacity:.75;line-height:1.6;margin-bottom:12px">Real-time compliance across all your workers. Cert expiry alerts. RAMS. Site inductions. Free to start.</div>
+        <button onclick="go('ob-e1')" style="width:100%;background:#1C3A5E;color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit"><i class="ti ti-building"></i> Create your free employer account</button>
+        <div style="text-align:center;margin-top:8px;font-size:10px;color:#64748b">Already on Construction Passport? <span style="color:#1C3A5E;font-weight:500;cursor:pointer">Sign in to verify</span></div>
+      </div>
+      <div style="text-align:center;padding:6px 14px 10px;font-size:9px;color:#94a3b8">constructionpassport.ie &middot; Scanned 24 Jun 2026 09:41</div>
+    </div>
+    <div style="padding:8px 14px 10px;background:#fff;border-top:.5px solid #f1f5f9;flex-shrink:0">
+      <button onclick="go('w-passport')" style="width:100%;background:transparent;border:1px solid #e2e8f0;border-radius:10px;padding:10px;font-size:12px;color:#64748b;cursor:pointer;font-family:inherit"><i class="ti ti-arrow-left"></i> Back to my passport</button>
+    </div>
+  </div>
+
+  <!-- ══ CERT SELECT — Sam's grid flow ══ -->
+  <div class="scr" id="w-cert-select">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="history.back ? go('w-passport') : go('w-passport')"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="ht">Your qualifications</div>
+      <div class="hs" id="cert-count">Tap everything you hold</div>
+    </div>
+    <div class="sc">
+      <div class="cert-grid">
+        <div class="cert-card" onclick="selectCert(this,'Safe Pass')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#E6F1FB"><i class="ti ti-certificate" style="color:#1C3A5E"></i></div>
+          <div class="cc-label">Safe Pass</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Manual Handling')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-barbell" style="color:#92400e"></i></div>
+          <div class="cc-label">Manual Handling</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'MEWP / IPAF')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#E6F1FB"><i class="ti ti-building-skyscraper" style="color:#1C3A5E"></i></div>
+          <div class="cc-label">MEWP / IPAF</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Working at Heights')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-stairs-up" style="color:#92400e"></i></div>
+          <div class="cc-label">Working at Heights</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'First Aid QQI L5')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fee2e2"><i class="ti ti-heart-plus" style="color:#dc2626"></i></div>
+          <div class="cc-label">First Aid QQI L5</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Forklift / FLT')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f0fdf4"><i class="ti ti-forklift" style="color:#166634"></i></div>
+          <div class="cc-label">Forklift / FLT</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Confined Spaces')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-circle-dotted" style="color:#92400e"></i></div>
+          <div class="cc-label">Confined Spaces</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'F-Gas')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#ecfeff"><i class="ti ti-wind" style="color:#0891b2"></i></div>
+          <div class="cc-label">F-Gas</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Abrasive Wheels')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f8fafc"><i class="ti ti-circle" style="color:#64748b"></i></div>
+          <div class="cc-label">Abrasive Wheels</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Scaffolding')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#E6F1FB"><i class="ti ti-ladder" style="color:#1C3A5E"></i></div>
+          <div class="cc-label">Scaffolding</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Banksman / Slinger')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-hand-stop" style="color:#92400e"></i></div>
+          <div class="cc-label">Banksman / Slinger</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Tower Crane')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f0fdf4"><i class="ti ti-crane" style="color:#166634"></i></div>
+          <div class="cc-label">Tower Crane</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Mobile Crane')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f0fdf4"><i class="ti ti-crane" style="color:#166634"></i></div>
+          <div class="cc-label">Mobile Crane</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Excavator / 360')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-bulldozer" style="color:#92400e"></i></div>
+          <div class="cc-label">Excavator / 360°</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Telehandler')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f0fdf4"><i class="ti ti-tractor" style="color:#166634"></i></div>
+          <div class="cc-label">Telehandler</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Dumper')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#f8fafc"><i class="ti ti-truck" style="color:#64748b"></i></div>
+          <div class="cc-label">Dumper</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Asbestos Awareness')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fee2e2"><i class="ti ti-biohazard" style="color:#dc2626"></i></div>
+          <div class="cc-label">Asbestos Awareness</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Fire Warden')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fee2e2"><i class="ti ti-flame" style="color:#dc2626"></i></div>
+          <div class="cc-label">Fire Warden</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Electrical / Safe Isolation')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-bolt" style="color:#92400e"></i></div>
+          <div class="cc-label">Electrical / Safe Isolation</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'CSCS Card')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#E6F1FB"><i class="ti ti-id-badge" style="color:#1C3A5E"></i></div>
+          <div class="cc-label">CSCS Card</div>
+        </div>
+        <div class="cert-card" onclick="selectCert(this,'Welding')">
+          <div class="cc-tick"><i class="ti ti-check" style="font-size:9px;color:#fff"></i></div>
+          <div class="cc-icon" style="background:#fef3c7"><i class="ti ti-flame" style="color:#f59e0b"></i></div>
+          <div class="cc-label">Welding</div>
+        </div>
+      </div>
+      <div style="height:6px"></div>
+    </div>
+    <div class="ftr">
+      <button class="btn" id="cert-next-btn" style="background:#cbd5e1;color:#fff;pointer-events:none" onclick="showUploads()">Next — upload my certs <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ══ CERT UPLOAD ALL — one card per selected cert ══ -->
+  <div class="scr" id="w-cert-upload-all">
+    <div class="hdr" style="background:#1C3A5E">
+      <div class="bk" onclick="go('w-cert-select')"><i class="ti ti-arrow-left"></i> Back</div>
+      <div class="ht">Upload your certs</div>
+      <div class="hs">Scan or photo each one — details auto-fill</div>
+    </div>
+    <div class="sc">
+      <div style="padding:9px 9px 0" id="cert-upload-list">
+        <!-- populated dynamically by showUploads() -->
+      </div>
+      <div style="margin:4px 9px 9px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-size:11px;color:#64748b">
+        You can skip any cert now and add it later from your passport.
+      </div>
+    </div>
+    <div class="ftr">
+      <button class="btn" style="background:#1C3A5E;color:#fff" onclick="go('w-passport')"><i class="ti ti-circle-check"></i> Save to my passport</button>
+    </div>
+  </div>
+
+
 </div>
 <script>
 const ROLES={
@@ -1227,6 +1422,35 @@ function pickTrade(el){
   el.classList.add('sel');
 }
 function togPPE(el){const active=el.classList.contains('pb');if(active){el.classList.remove('pb');el.style.cssText='background:#f8fafc;border:1px solid #e2e8f0;color:#94a3b8;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}else{el.style.cssText='background:#E6F1FB;border:1px solid #bfdbfe;color:#1C3A5E;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:3px'}}
+
+var _selCerts=[];
+function selectCert(el,name){
+  var idx=_selCerts.indexOf(name);
+  if(idx>-1){_selCerts.splice(idx,1);el.classList.remove('cert-sel');}
+  else{_selCerts.push(name);el.classList.add('cert-sel');}
+  var n=_selCerts.length;
+  var btn=document.getElementById('cert-next-btn');
+  btn.style.background=n>0?'#1C3A5E':'#cbd5e1';
+  btn.style.pointerEvents=n>0?'all':'none';
+  btn.innerHTML=n>0?'Next — upload '+n+' cert'+(n>1?'s':'')+'  <i class="ti ti-arrow-right"></i>':'Next — upload my certs <i class="ti ti-arrow-right"></i>';
+  document.getElementById('cert-count').textContent=n>0?n+' selected':'Tap everything you hold';
+}
+function showUploads(){
+  var container=document.getElementById('cert-upload-list');
+  container.innerHTML='';
+  _selCerts.forEach(function(name){
+    var div=document.createElement('div');
+    div.className='ucard';
+    div.innerHTML='<div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:8px">'+name+'</div>'
+      +'<div style="display:flex;gap:7px;margin-bottom:8px">'
+      +'<button onclick="go(\'w-cert-scan\')" style="flex:1;padding:9px;border-radius:9px;background:#1C3A5E;color:#fff;border:none;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit"><i class=\"ti ti-scan\"></i> Scan card</button>'
+      +'<button onclick="go(\'w-cert-scan\')" style="flex:1;padding:9px;border-radius:9px;background:#f8fafc;color:#0f172a;border:1px solid #e2e8f0;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit"><i class=\"ti ti-photo\"></i> Upload photo</button>'
+      +'</div>'
+      +'<input placeholder="Expiry date (e.g. Mar 2028)" style="width:100%;box-sizing:border-box;border:none;border-top:.5px solid #f1f5f9;padding:8px 0 0;font-size:12px;color:#0f172a;outline:none;background:transparent;font-family:inherit">';
+    container.appendChild(div);
+  });
+  go('w-cert-upload-all');
+}
 </script>
 </body>
 </html>
